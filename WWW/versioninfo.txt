@@ -1,0 +1,14 @@
+Final version.
+--> Visual improvements with a new theme.
+--> Gazepath intergated, working good.
+--> Heatmap integrated, working good.
+--> Download PNG, works for gazepath and STA.
+--> STA integrated, working good.
+
+Bugs:
+	--> Transitions could be smoother.
+	--> Some transtions does not work.
+	--> Download PNG does not work for Heatmap.
+Missing Points:
+	--> Visual improvements must be done.
+	--> Informatives are missing.
