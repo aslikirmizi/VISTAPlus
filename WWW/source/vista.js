@@ -257,9 +257,7 @@ vista = function(
         heatmapDataPoint.h_x_pos[counter]=stimuliInstant[data.headerConvention[3]];
         heatmapDataPoint.h_y_pos[counter]=stimuliInstant[data.headerConvention[4]];
         counter=counter+1;
-        //alert("****");
-        //alert(heatmapDataPoint.h_x_pos);
-        // DATAYI ALMAYI BAŞARDIK
+      
         
        return {
          id: index,
@@ -645,15 +643,10 @@ vista = function(
         });
          
         heatdata = heatmapvalues(stimuliInstant);
-        //alert("tekrar" + heatdata.max);
         heatmapInstance.setData(heatdata);
     };
     
     function heatmapvalues(stimuliInstant){
-            //alert("length");
-            //alert(heatmapDataPoint.h_x_pos.length);
-            //alert(heatmapDataPoint.h_y_pos.length);
-            //alert(heatmapDataPoint.h_fix_value.length);
             var hpoints = new Array();
             var maxvalue = 0;
             var width = 1240.17;
@@ -667,37 +660,25 @@ vista = function(
                     y: heatmapDataPoint.h_y_pos[i]
                 };
                 
-                //alert("********************");
-                //alert(heatmapDataPoint.h_x_pos[i]);
-                //alert(point.point_x[i]);
+                
                 maxvalue = Math.max(maxvalue, heatmapDataPoint.h_fix_value[i]);
           
                 hpoints.push(pointh);
-                //alert("points");
-                //alert("yes1"+ points[i].point_x);
-                
-         
-            
-                //alert("data aktarımı bitti");
-                //alert(point.point_x);
+             
         }
-        //alert("yes" + hpoints[1].x);
+       
         var hdata = {
             max: maxvalue,
             data: hpoints
         };
 
-       // alert("this is max value" + hdata.max);
-       // alert("this if first value" + hdata.data[1].x);
         return hdata;
     }
     
    
     
     this.generateHeatmap = function (stimuliName, filter=null){
-        //alert("----");
-        //alert(heatmapDataPoint.h_x_pos);
-        
+     
         listener("LOADERSTART");
 
         if(filter != null && filter.img != null){
@@ -709,13 +690,7 @@ vista = function(
             createHeatmap(stimuliName);
         }
         
-        //alert(heatmapDataPoint.h_x_pos[2]);
-       
-        //listener("LOADEREND");
+      
     };
-    
-    // Heatmap generation functions end 
-
-    //listener("LOADEREND");
     
 }; 
