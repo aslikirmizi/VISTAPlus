@@ -115,7 +115,7 @@
                                 STA
                                 <a href="#"><font color="#000000"></font></a>
                             </div>
-</li>
+                        </li>
                    
 
 
@@ -318,7 +318,7 @@
     var discovery = true;
     var selectedStimuliName = "";
     
-    var selectedVisualMethod = "GAZEPATH";
+    var selectedVisualMethod;
     var prevVisualMethod = "";
     var filter = new Array();
     var vistaModule;
@@ -425,10 +425,10 @@
     function controlVisualMethods() {
         if (!vistaModule.isSTAMAPApplicable()) {
             $('#methodSTAMap').addClass("disabled");
-            $('methodHeatMap').removeClass("disabled"); // atacan
+           // $('methodHeatMap').removeClass("disabled"); // atacan
         } else {
             $('#methodSTAMap').removeClass("disabled");
-            $('#methodHeatMap').addClass("disabled"); //atacan
+          //  $('#methodHeatMap').addClass("disabled"); //atacan
         }
     }
 
@@ -458,10 +458,18 @@
         $('#map').parent().find('.aois').remove();
     }
 
+    function clearAOIsHeatMap() {
+        $('#inner').parent().find('.aois').remove();
+    }
+
     function drawAOIs() {
         if (selectedVisualMethod == "GAZEPATH") {
             clearAOIs();
             $('#map').parent().append(vistaModule.getAOIHTML());
+        }
+        else if (selectedVisualMethod == "HEATMAP") {
+            clearAOIsHeatMap();
+            $('#inner').parent().append(vistaModule.getAOIHTML());
         }
     }
 
@@ -534,6 +542,8 @@
             event.preventDefault();
             if (!$(this).hasClass("disabled") && selectedStimuliName != "") {
                 selectedVisualMethod = $(this).data("type");
+                alert("selected method:");
+                alert(selectedVisualMethod);
                 if (selectedVisualMethod != prevVisualMethod) {
                     if (selectedVisualMethod == "GAZEPATH") {
                         drawAOIs();
@@ -541,12 +551,10 @@
                         vistaModule.addAOIBlock(false);
                     } 
                     else if (selectedVisualMethod == "HEATMAP") {
-                        clearAOIs();
-
                         resetForHeatmapMethod();
-                        vistaModule.removeAOIs();
-                        vistaModule.generateHeatmap(selectedStimuliName);      
-
+                        vistaModule.generateHeatmap(selectedStimuliName);   
+                        drawAOIs();
+                        vistaModule.addAOIBlock(false);
                         
                     }
                     
@@ -565,17 +573,17 @@
         $('#methodHeatMap').on("click", function () {
            // alert("Hello!");
            // resetVisualMethods();
-            resetForHeatmapMethod();
-            vistaModule.removeAOIs();
-            vistaModule.generateHeatmap(selectedStimuliName);
+            // resetForHeatmapMethod();
+            drawAOIs();
+            //vistaModule.generateHeatmap(selectedStimuliName);
         }); 
         
         $('#menuTrigger').on('click', function (event) {
-            if (discovery == true) {
+            if (discovery == true)
+            {
                 $('#menuTriggerTab').tapTarget('close');
                 event.preventDefault();
             }
-
         });
 
         $('#dataSelectionTrigger').on('click', function () {

@@ -699,7 +699,7 @@ vista = function(
         //alert(heatmapDataPoint.h_x_pos);
         
         listener("LOADERSTART");
-
+        
         if(filter != null && filter.img != null){
             console.log("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
