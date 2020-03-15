@@ -31,7 +31,7 @@
 
         <div class="buttonkk" style="left:30%; top:5%">
             <label id="dataAddTrigger" class="buttonk button1" style="vertical-align:middle">
-                <span> Click Here To Add Data! </span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
+                <span> Click Here To Add Data!</span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
                                                              multiple />
             </label>
         </div>
@@ -92,34 +92,36 @@
 
         <div class="col s12">
 
-            <div style="padding: 0px;" class="card-panel outer">
+            <div style="padding: 0px" class="card-panel outer" >
 
 
                 <!-- VISUALISATION METHOD SELECTION-->
 
                 <ul id="visualMethodSelector" class="tabs">
-                        <li id="methodGazePath" data-type="GAZEPATH" class="buttona buttona1">
-                            <div class="active" href="#">Gaze Path</div>
-                        </li>
+                    <li id="methodGazePath" data-type="GAZEPATH" class="buttona buttona1">
+                        <div class="active" href="#">Gaze Path</div>
+                    </li>
 
-                        <!-- heatmap function will be binded to here-->
-                        <li id="methodHeatMap" data-type="HEATMAP" class="buttona buttona1">
-                            <div class="active">
-                                Heat Map
-                                <a href="#"><font color="#000000"></font></a>
-                            </div>
-                        </li>
+                    <!-- heatmap function will be binded to here-->
+                    <li id="methodHeatMap" data-type="HEATMAP" class="buttona buttona1">
+                        <div class="active">
+                            Heat Map
+                            <a href="#"><font color="#000000"></font></a>
+                        </div>
+                    </li>
 
-                        <li id="methodSTAMap" data-type="STAMAP" class="buttona buttona1">
-                            <div class="active">
-                                STA
-                                <a href="#"><font color="#000000"></font></a>
-                            </div>
-                        </li>
-                   
+                    <li id="methodSTAMap" data-type="STAMAP" class="tooltip buttona buttona1">
+                        <div class="active"> 
+                            STA<span class="tooltiptext" id="toolbox"><pre>Not activated until
+AOIs are selected.</pre>
+</span>
+                            <a href="#"><font color="#000000"></font></a>
+                        </div>
+                    </li>
 
 
-                        <!-- heatmap function will be binded to here-->
+
+                    <!-- heatmap function will be binded to here-->
                 </ul>
                 <!-- SELECTION PART ENDED-->
 
@@ -129,12 +131,15 @@
                         <div class="inner" id="map" style="z-index: 2;"></div>
                         <!-- innerı backgroundın içine alınca heatmap aşağı gitmiyor artık bg üzerine geliyor -->
                     </div>
+                   
                     <!-- arkaplan -->
                     <!-- gazepath buraya canvas yaratıyor -->
                     <!-- heatmap buraya gelmeli -->
                     <!--<div class="heatmap" style="position: absolute">-->
                 </div>
+
             </div>
+
 
             <!-- Loading Animation -->
             <div id="mapLoader" class="preloader-wrapper big active inner hide">
@@ -233,11 +238,11 @@
         </ul>
     -->
     <!-- Stimuli Viewing Section -->
-    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer">
+    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer" >
         <div class="modal-content black-text">
             <h4>Following Stimulis are Detected;</h4>
             <p>Please select a stimuli.</p>
-            <ul id="dataSelectionList" class="collapsible popout" data-collapsible="accordion">
+            <ul id="dataSelectionList" class="collapsible popout black-text" data-collapsible="accordion">
             </ul>
         </div>
         <div class="modal-footer">
@@ -428,6 +433,7 @@
            // $('methodHeatMap').removeClass("disabled"); // atacan
         } else {
             $('#methodSTAMap').removeClass("disabled");
+            $('#toolbox').hide();
           //  $('#methodHeatMap').addClass("disabled"); //atacan
         }
     }
@@ -446,6 +452,7 @@
         //canvas->gazepath icin -> hidelandı
         //Visualmethodselector->li->active removelandı (cunku o gazepath)
         prevVisualMethod = "GAZEPATH";
+        clearAOIs();
         selectedVisualMethod = "HEATMAP";
         $('#visualMethodSelector').find("li").removeClass("active");
         $('#visualMethodSelector').find("a").removeClass("active");
@@ -455,12 +462,10 @@
     }
 
     function clearAOIs() {
+        alert("clearAOIsagirdi");
         $('#map').parent().find('.aois').remove();
     }
-
-    function clearAOIsHeatMap() {
-        $('#inner').parent().find('.aois').remove();
-    }
+    
 
     function drawAOIs() {
         if (selectedVisualMethod == "GAZEPATH") {
@@ -468,8 +473,9 @@
             $('#map').parent().append(vistaModule.getAOIHTML());
         }
         else if (selectedVisualMethod == "HEATMAP") {
-            clearAOIsHeatMap();
-            $('#inner').parent().append(vistaModule.getAOIHTML());
+            alert("drawAOIiçinegirdi");
+            clearAOIs();
+            $('#map').parent().append(vistaModule.getAOIHTML());
         }
     }
 
@@ -551,11 +557,10 @@
                         vistaModule.addAOIBlock(false);
                     } 
                     else if (selectedVisualMethod == "HEATMAP") {
-                        resetForHeatmapMethod();
-                        vistaModule.generateHeatmap(selectedStimuliName);   
+                        alert("yes heatmap!!");
                         drawAOIs();
+                        vistaModule.generateHeatmap(selectedStimuliName);   
                         vistaModule.addAOIBlock(false);
-                        
                     }
                     
                     else if (selectedVisualMethod == "STAMAP") {
@@ -563,7 +568,7 @@
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
                     }
-                    prevVisualMethod = selectedVisualMethod;
+                    //prevVisualMethod = selectedVisualMethod;
                     $(this).parent().find("a").removeClass("active");
                     $(this).find("li").addClass("active");
                 }
@@ -571,10 +576,9 @@
         });
 
         $('#methodHeatMap').on("click", function () {
-           // alert("Hello!");
-           // resetVisualMethods();
-            // resetForHeatmapMethod();
-            drawAOIs();
+           alert("Hello heatmap!");
+           resetForHeatmapMethod();
+            //drawAOIs();
             //vistaModule.generateHeatmap(selectedStimuliName);
         }); 
         
