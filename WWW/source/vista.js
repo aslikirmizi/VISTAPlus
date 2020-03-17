@@ -20,6 +20,8 @@ vista = function(
         },
         physics: false
     };
+    //Global Heatmapinstance
+   
     
     var mapData = {
         nodes: new vis.DataSet(),
@@ -632,20 +634,7 @@ vista = function(
     
     /* Function Calls ENDS */
     
-    // Heatmap generation functions start
-    
-     function createHeatmap(stimuliInstant){
-     
-
-        var heatdata;
-        var heatmapInstance = h337.create({
-        container : document.querySelector('.inner'),
-        });
-         
-        heatdata = heatmapvalues(stimuliInstant);
-        heatmapInstance.setData(heatdata);
-    };
-    
+    // Heatmap generation functions starts here.
     function heatmapvalues(stimuliInstant){
             var hpoints = new Array();
             var maxvalue = 0;
@@ -660,12 +649,19 @@ vista = function(
                     y: heatmapDataPoint.h_y_pos[i]
                 };
                 
-                
+    function createHeatmap(stimuliInstant){
+        
+        var heatdata;
+        heatdata = heatmapvalues(stimuliInstant);
+        var heatmapInstance = h337.create({
+        container : document.querySelector('.inner'),
+        });
+        heatmapInstance.setData(heatdata);
+    };
                 maxvalue = Math.max(maxvalue, heatmapDataPoint.h_fix_value[i]);
-          
                 hpoints.push(pointh);
              
-        }
+    }
        
         var hdata = {
             max: maxvalue,
@@ -678,14 +674,12 @@ vista = function(
    
     
     this.generateHeatmap = function (stimuliName, filter=null){
-     
         listener("LOADERSTART");
 
         if(filter != null && filter.img != null){
             fetchBackgroundImage(stimuliName, filter.img);
         } 
         else{
-            
             fetchBackgroundImage(stimuliName);
             createHeatmap(stimuliName);
         }

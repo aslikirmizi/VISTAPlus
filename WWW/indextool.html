@@ -543,9 +543,10 @@
                     else if (selectedVisualMethod == "HEATMAP") {
                         clearAOIs();
                         resetForHeatmapMethod();
+                        //drawAOIs();
                         vistaModule.removeAOIs();
                         vistaModule.generateHeatmap(selectedStimuliName); 
-                        
+                        //vistaModule.addAOIBlock(false);
                         
                     }
                     
