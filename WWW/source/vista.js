@@ -5,7 +5,11 @@ vista = function(
         staAddress
         ){
     
-    /* Global Variables STARTS */
+/* Global Variables STARTS */
+    var heatdata;
+    var heatmapInstance;
+    var heatmapInstanceflag = 0;
+
     var mapOptions = {
         nodes: {
             shape: 'dot',
@@ -212,7 +216,18 @@ vista = function(
         mapData.edges.update(visualizationData.edges);
     }
     
-    this.showGazePath = function(stimuliName, filter = null){// olan grafa arka plan koyuyor tek işi bu.
+    this.showGazePath = function (stimuliName, filter = null) {// olan grafa arka plan koyuyor tek işi bu.
+        alert("heatmapinstanceflag");
+        alert(heatmapInstanceflag);
+        if (heatmapInstanceflag == 1) {
+            alert("girdi ve sıfırladı heat datayı");
+            heatdata = {
+                max: 0,
+                data: []
+            };
+            heatmapInstance.setData(heatdata);
+        }
+
         listener("LOADERSTART");
         if(filter != null && filter.img != null){
             console.log("hello 2");
@@ -220,7 +235,9 @@ vista = function(
         } else{
             fetchBackgroundImage(stimuliName);
         }
-        createVisualMap(createGazePath(stimuliName, filter));        
+        createVisualMap(createGazePath(stimuliName, filter));
+
+
     };
     
     function createGazePath(stimuliName, filter){//dön
@@ -466,11 +483,11 @@ vista = function(
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
                     'height: ' + toRealY(aoi.lengthY) + '; '+
-                    'z-index: 3; background-color:' + aoi.rgba + '; " ' +
+                    'z-index: 3; background-color:' + aoi.rgba + '; " ' + //hangisi onde hangisi arkada olsun diye ga
                     'data-index="' + aoi.index + '">'+
                     '<h5 class="unselectable center-align">' + aoi.index + '</h5>'+
                     '</div>';
-        }  
+        }  //her bir AOI için div oluşuyor, backgorund color değişiyor
         
         return HTML;
     }
@@ -635,15 +652,17 @@ vista = function(
     /* Function Calls ENDS */
     
     // Heatmap generation functions start
-    
-     function createHeatmap(stimuliInstant){
-        //alert("heatmapInstance öncesi");
 
-        var heatdata;
-        var heatmapInstance = h337.create({
-        container : document.querySelector('.inner'),
-        });
-         
+     function createHeatmap(stimuliInstant){
+         //alert("heatmapInstance öncesi");
+         if (heatmapInstanceflag == 0)
+         {
+             heatmapInstance = h337.create(
+             {
+            container : document.querySelector('.vis-network'),
+             });
+         }
+
         heatdata = heatmapvalues(stimuliInstant);
         //alert("tekrar" + heatdata.max);
         heatmapInstance.setData(heatdata);
@@ -697,7 +716,11 @@ vista = function(
     this.generateHeatmap = function (stimuliName, filter=null){
         //alert("----");
         //alert(heatmapDataPoint.h_x_pos);
-        
+        mapData.nodes.clear();
+        mapData.edges.clear();
+
+
+
         listener("LOADERSTART");
         
         if(filter != null && filter.img != null){
@@ -708,7 +731,8 @@ vista = function(
             fetchBackgroundImage(stimuliName);
             createHeatmap(stimuliName);
         }
-        
+
+        heatmapInstanceflag = 1;
         //alert(heatmapDataPoint.h_x_pos[2]);
        
         //listener("LOADEREND");

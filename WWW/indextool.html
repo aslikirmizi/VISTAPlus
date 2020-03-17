@@ -439,30 +439,30 @@ AOIs are selected.</pre>
     }
 
     function resetVisualMethods() {
+        clearAOIs();
         prevVisualMethod = "GAZEPATH";
         selectedVisualMethod = "GAZEPATH";
         $('#visualMethodSelector').find("li").removeClass("disabled");
         $('#visualMethodSelector').find("a").removeClass("active");
         $('#methodGazePath').find("a").addClass("active");
+        $('canvas').show();
+
         vistaModule.addAOIBlock(false);
         controlVisualMethods();
     }
     
     function resetForHeatmapMethod() {
-        //canvas->gazepath icin -> hidelandı
-        //Visualmethodselector->li->active removelandı (cunku o gazepath)
         prevVisualMethod = "GAZEPATH";
         clearAOIs();
         selectedVisualMethod = "HEATMAP";
         $('#visualMethodSelector').find("li").removeClass("active");
-        $('#visualMethodSelector').find("a").removeClass("active");
+        //$('#visualMethodSelector').find("a").removeClass("active");
         $('canvas').hide();
         vistaModule.addAOIBlock(false);
         controlVisualMethods();
     }
 
     function clearAOIs() {
-        alert("clearAOIsagirdi");
         $('#map').parent().find('.aois').remove();
     }
     
@@ -475,7 +475,7 @@ AOIs are selected.</pre>
         else if (selectedVisualMethod == "HEATMAP") {
             alert("drawAOIiçinegirdi");
             clearAOIs();
-            $('#map').parent().append(vistaModule.getAOIHTML());
+            $('.vis-network').parent().append(vistaModule.getAOIHTML());
         }
     }
 
@@ -551,7 +551,11 @@ AOIs are selected.</pre>
                 alert("selected method:");
                 alert(selectedVisualMethod);
                 if (selectedVisualMethod != prevVisualMethod) {
-                    if (selectedVisualMethod == "GAZEPATH") {
+
+                    if (selectedVisualMethod == "GAZEPATH")
+                    {
+                        alert("selected method is gazepath");
+                        resetVisualMethods();
                         drawAOIs();
                         vistaModule.showGazePath(selectedStimuliName);
                         vistaModule.addAOIBlock(false);
@@ -561,6 +565,7 @@ AOIs are selected.</pre>
                         drawAOIs();
                         vistaModule.generateHeatmap(selectedStimuliName);   
                         vistaModule.addAOIBlock(false);
+                        prevVisualMethod = "HEATMAP";
                     }
                     
                     else if (selectedVisualMethod == "STAMAP") {
@@ -578,7 +583,8 @@ AOIs are selected.</pre>
         $('#methodHeatMap').on("click", function () {
            alert("Hello heatmap!");
            resetForHeatmapMethod();
-            //drawAOIs();
+           drawAOIs();
+           vistaModule.addAOIBlock(false);
             //vistaModule.generateHeatmap(selectedStimuliName);
         }); 
         
