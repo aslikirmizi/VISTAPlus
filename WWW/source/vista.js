@@ -635,7 +635,7 @@ vista = function(
     // Heatmap generation functions start
     
      function createHeatmap(stimuliInstant){
-        //alert("heatmapInstance öncesi");
+     
 
         var heatdata;
         var heatmapInstance = h337.create({
@@ -682,10 +682,10 @@ vista = function(
         listener("LOADERSTART");
 
         if(filter != null && filter.img != null){
-            console.log("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
-        } else{
-             
+        } 
+        else{
+            
             fetchBackgroundImage(stimuliName);
             createHeatmap(stimuliName);
         }
