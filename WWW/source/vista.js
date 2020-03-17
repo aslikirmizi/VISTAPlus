@@ -5,7 +5,11 @@ vista = function(
         staAddress
         ){
     
-    /* Global Variables STARTS */
+/* Global Variables STARTS */
+    var heatdata;
+    var heatmapInstance;
+    var heatmapInstanceflag = 0;
+
     var mapOptions = {
         nodes: {
             shape: 'dot',
@@ -54,7 +58,8 @@ vista = function(
 
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
     
-    var counter=0;
+    var counter = 0;
+    var counterk=0
     /* Global Variables ENDS */
     
     /* File Module Functions STARTS */
@@ -212,15 +217,29 @@ vista = function(
         mapData.edges.update(visualizationData.edges);
     }
     
-    this.showGazePath = function(stimuliName, filter = null){// olan grafa arka plan koyuyor tek işi bu.
+    this.showGazePath = function (stimuliName, filter = null) {// olan grafa arka plan koyuyor tek işi bu.
+        alert("heatmapinstanceflag");
+        alert(heatmapInstanceflag);
+        if (heatmapInstanceflag == 1) {
+            alert("girdi ve sıfırladı heat datayı");
+            heatdata = {
+                max: 0,
+                data: []
+            };
+            heatmapInstance.setData(heatdata);
+            clearDataforHeatmap();
+        }
+        alert("createvisualmap oncesi");
         listener("LOADERSTART");
-        if(filter != null && filter.img != null){
-            console.log("hello 2");
+        if (filter != null && filter.img != null) {
+            alert("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
         } else{
             fetchBackgroundImage(stimuliName);
         }
-        createVisualMap(createGazePath(stimuliName, filter));        
+
+        createVisualMap(createGazePath(stimuliName, filter));
+
     };
     
     function createGazePath(stimuliName, filter){//dön
@@ -250,15 +269,27 @@ vista = function(
         }
         return {nodes, edges};
     }
-    
-    function convertToVisualNode(index, stimuliInstant){   
-        
+
+    function clearDataforHeatmap()
+    {
+        for (var i = 0; heatmapDataPoint.h_fix_value[i]!=null; i++)
+        {
+            heatmapDataPoint.h_fix_value[i] = null;
+            heatmapDataPoint.h_x_pos[i] = null;
+            heatmapDataPoint.h_y_pos[i] = null;
+        }
+        counter = 0;
+
+    }
+
+    function convertToVisualNode(index, stimuliInstant) {
+        //loadDataforHeatmap(stimuliInstant);
         heatmapDataPoint.h_fix_value[counter]=stimuliInstant[data.headerConvention[2]];
         heatmapDataPoint.h_x_pos[counter]=stimuliInstant[data.headerConvention[3]];
         heatmapDataPoint.h_y_pos[counter]=stimuliInstant[data.headerConvention[4]];
         counter=counter+1;
         //alert("****");
-        //alert(heatmapDataPoint.h_x_pos);
+
         // DATAYI ALMAYI BAŞARDIK
         
        return {
@@ -271,6 +302,8 @@ vista = function(
        };
         
     }
+
+       
     
     function toRealX(x){ return x*(size.width/size.dataW); }
     function toRealY(y){ return y*(size.height/size.dataH); }
@@ -466,11 +499,11 @@ vista = function(
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
                     'height: ' + toRealY(aoi.lengthY) + '; '+
-                    'z-index: 3; background-color:' + aoi.rgba + '; " ' +
+                    'z-index: 3; background-color:' + aoi.rgba + '; " ' + //hangisi onde hangisi arkada olsun diye ga
                     'data-index="' + aoi.index + '">'+
                     '<h5 class="unselectable center-align">' + aoi.index + '</h5>'+
                     '</div>';
-        }  
+        }  //her bir AOI için div oluşuyor, backgorund color değişiyor
         
         return HTML;
     }
@@ -635,21 +668,25 @@ vista = function(
     /* Function Calls ENDS */
     
     // Heatmap generation functions start
-    
-     function createHeatmap(stimuliInstant){
-        //alert("heatmapInstance öncesi");
 
-        var heatdata;
-        var heatmapInstance = h337.create({
-        container : document.querySelector('.inner'),
-        });
-         
+     function createHeatmap(stimuliInstant){
+         //alert("heatmapInstance öncesi");
+         if (heatmapInstanceflag == 0)
+         {
+             heatmapInstance = h337.create(
+             {
+            container : document.querySelector('.vis-network'),
+             });
+         }
+
         heatdata = heatmapvalues(stimuliInstant);
-        //alert("tekrar" + heatdata.max);
-        heatmapInstance.setData(heatdata);
+        alert("tekrar" + heatdata.max);
+         heatmapInstance.setData(heatdata);
+         
     };
     
-    function heatmapvalues(stimuliInstant){
+    function heatmapvalues(stimuliInstant) {
+
             //alert("length");
             //alert(heatmapDataPoint.h_x_pos.length);
             //alert(heatmapDataPoint.h_y_pos.length);
@@ -674,10 +711,7 @@ vista = function(
           
                 hpoints.push(pointh);
                 //alert("points");
-                //alert("yes1"+ points[i].point_x);
-                
-         
-            
+                //alert("yes1"+ points[i].point_x);            
                 //alert("data aktarımı bitti");
                 //alert(point.point_x);
         }
@@ -687,9 +721,9 @@ vista = function(
             data: hpoints
         };
 
-       // alert("this is max value" + hdata.max);
-       // alert("this if first value" + hdata.data[1].x);
-        return hdata;
+       alert("this is max value" + hdata.max);
+       alert("this if first value" + hdata.data[1].x);
+       return hdata;
     }
     
    
@@ -697,9 +731,11 @@ vista = function(
     this.generateHeatmap = function (stimuliName, filter=null){
         //alert("----");
         //alert(heatmapDataPoint.h_x_pos);
-        
-        listener("LOADERSTART");
+        mapData.nodes.clear();
+        mapData.edges.clear();
 
+        listener("LOADERSTART");
+        
         if(filter != null && filter.img != null){
             console.log("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
@@ -708,7 +744,9 @@ vista = function(
             fetchBackgroundImage(stimuliName);
             createHeatmap(stimuliName);
         }
-        
+
+        heatmapInstanceflag = 1;
+        //alert("bak:");
         //alert(heatmapDataPoint.h_x_pos[2]);
        
         //listener("LOADEREND");
