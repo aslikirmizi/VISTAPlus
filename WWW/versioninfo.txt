@@ -4,11 +4,14 @@ Final version.
 --> Heatmap integrated, working good.
 --> Download PNG, works for gazepath and STA.
 --> STA integrated, working good.
+--> Smooth transitions between all types of visualisations.
+--> AOI selection on Heatmap done.
+--> STA is working with Heatmap done.
+
 
 Bugs:
-	--> Transitions could be smoother.
-	--> Some transtions does not work.
-	--> Download PNG does not work for Heatmap.
+	--> Download PNG does not work properly
 Missing Points:
 	--> Visual improvements must be done.
-	--> Informatives are missing.
+	-->Animated version will be added.
+	
