@@ -743,4 +743,9 @@ vista = function(
 
     //listener("LOADEREND");
     
+	
+	/*  ANIMATED STA MAP Starts */
+	
+	
+	/* ANIMATED STA MAP Ends */
 }; 
