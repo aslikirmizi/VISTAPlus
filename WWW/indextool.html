@@ -110,11 +110,19 @@
                         </div>
                     </li>
 
-                    <li id="methodSTAMap" data-type="STAMAP" class="tooltip buttona buttona1">
-                        <div class="active"> 
-                            STA<span class="tooltiptext" id="toolbox"><pre>Not activated until
+                    <li id="methodSTAMap" data-type="STAMAP"class="tooltip buttona buttona1">
+                        <div class="active">
+                            STA<span class="tooltiptext" id="toolbox">
+                            <pre>Not activated until
 AOIs are selected.</pre>
-</span>
+                            </span>
+                            <a href="#"><font color="#000000"></font></a>
+                        </div>
+                    </li>
+
+                    <li id="methodAnimatedSTA" data-type="AnimatedSTA" class="buttona buttona1">
+                        <div class="active">
+                            Animated STA
                             <a href="#"><font color="#000000"></font></a>
                         </div>
                     </li>
@@ -240,13 +248,13 @@ AOIs are selected.</pre>
     <!-- Stimuli Viewing Section -->
     <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer" >
         <div class="modal-content black-text">
-            <h4>Following Stimulis are Detected;</h4>
-            <p>Please select a stimuli.</p>
+            <h4 style="text-align:center;">List of Detected Stimulis</h4>
+            <p style="text-align:center;">Please select a stimuli from the list below.</p>
             <ul id="dataSelectionList" class="collapsible popout black-text" data-collapsible="accordion">
             </ul>
         </div>
         <div class="modal-footer">
-            <a id="dataSelectionButton" href="#" class="modal-action modal-close waves-effect waves-green btn-flat ">Draw</a>
+            <a id="dataSelectionButton" href="#" class="modal-action modal-close waves-effect waves-green btn-flat ">Visualize Gazepath</a>
         </div>
     </div>
     <!-- Stimuli Viewing Section Ends -->
@@ -369,20 +377,22 @@ AOIs are selected.</pre>
                 '<div style="padding: 10px;" class="collapsible-body">' +
                 '<form class="col s12" action="#">' +
                 '<div class="row">' +
-                '<p>Participants</p>';
+                '<p>Participants</p>' +
+                '<p>Choose which participants to include. (All is selected by default) </p>';
 
             for (var j = 0; element["participants"].length > j; j++) {
                 var innerElement = element["participants"][j];
-                liHTML += '<div class="input-field col s3" id="">' +
+                liHTML += '<div style="color:red;" class="input-field col s3" id="">' +
                     '<input type="checkbox" value="1" class="participant" data-name="' + element["name"] + '" data-participant="' + innerElement + '" id="check-' + i + '-' + innerElement + '" checked/>' +
-                    '<label for="check-' + i + '-' + innerElement + '">Participant ' + innerElement + '</label>' +
+                    '<label style="color:black;" for="check-' + i + '-' + innerElement + '">Participant ' + innerElement + '</label>' +
                     '</div>';
             }
 
             liHTML +=
-                '<div class="input-field col s12">' +
-                '<div class="file-field input-field">'+
-                '<div class="waves-effect waves-light btn red">'+
+                '<div style="padding: 25px;" class="input-field col s12">' +
+                '<h9>You can also browse and upload a stimuli from your computer.</h9>'+
+                '<div class="file-field input-field">' +
+                '<div class="waves-effect waves-light btn red">' +
                 '<i class="material-icons">insert_photo</i>'+
                 '<input class="imgurl" placeholder="Image URL" data-name="' + element["name"] + '" id="' + element["name"] + '_IMG" type="file">' +
                 '</div>'+
@@ -430,7 +440,7 @@ AOIs are selected.</pre>
     function controlVisualMethods() {
         if (!vistaModule.isSTAMAPApplicable()) {
             $('#methodSTAMap').addClass("disabled");
-           // $('methodHeatMap').removeClass("disabled"); // atacan
+           //$('methodSTAMap').removeClass("disabled"); // atacan
         } else {
             $('#methodSTAMap').removeClass("disabled");
             $('#toolbox').hide();
@@ -445,12 +455,11 @@ AOIs are selected.</pre>
         $('#visualMethodSelector').find("li").removeClass("disabled");
         $('#visualMethodSelector').find("a").removeClass("active");
         $('#methodGazePath').find("a").addClass("active");
-        $('canvas').show();
-
+        //$('canvas').show();
         vistaModule.addAOIBlock(false);
         controlVisualMethods();
     }
-    
+
     function resetForHeatmapMethod() {
         prevVisualMethod = "GAZEPATH";
         clearAOIs();
@@ -463,17 +472,19 @@ AOIs are selected.</pre>
     }
 
     function clearAOIs() {
-        $('#map').parent().find('.aois').remove();
+        $('.vis-network').parent().find('.aois').remove();
     }
     
+    function prependEle(parent, child) {
+          parent.insertBefore(child, parent.firstChild);
+    }
 
     function drawAOIs() {
         if (selectedVisualMethod == "GAZEPATH") {
             clearAOIs();
-            $('#map').parent().append(vistaModule.getAOIHTML());
+            $('.vis-network').parent().append(vistaModule.getAOIHTML());
         }
         else if (selectedVisualMethod == "HEATMAP") {
-            alert("drawAOIiçinegirdi");
             clearAOIs();
             $('.vis-network').parent().append(vistaModule.getAOIHTML());
         }
@@ -548,27 +559,27 @@ AOIs are selected.</pre>
             event.preventDefault();
             if (!$(this).hasClass("disabled") && selectedStimuliName != "") {
                 selectedVisualMethod = $(this).data("type");
-                alert("selected method:");
-                alert(selectedVisualMethod);
                 if (selectedVisualMethod != prevVisualMethod) {
 
                     if (selectedVisualMethod == "GAZEPATH")
                     {
-                        alert("selected method is gazepath");
                         resetVisualMethods();
                         drawAOIs();
                         vistaModule.showGazePath(selectedStimuliName);
                         vistaModule.addAOIBlock(false);
                     } 
                     else if (selectedVisualMethod == "HEATMAP") {
-                        alert("yes heatmap!!");
+                        if ($(".heatmap-canvas").is(":hidden"))
+                            $(".heatmap-canvas").show();
                         drawAOIs();
-                        vistaModule.generateHeatmap(selectedStimuliName);   
-                        vistaModule.addAOIBlock(false);
+                        vistaModule.generateHeatmap(selectedStimuliName);
+                        $( ".heatmap-canvas" ).prependTo( $( ".vis-network" ) );
+                        //vistaModule.addAOIBlock(false);
                         prevVisualMethod = "HEATMAP";
                     }
                     
                     else if (selectedVisualMethod == "STAMAP") {
+                        $(".heatmap-canvas").hide();
                         clearAOIs();
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
@@ -581,10 +592,8 @@ AOIs are selected.</pre>
         });
 
         $('#methodHeatMap').on("click", function () {
-           alert("Hello heatmap!");
            resetForHeatmapMethod();
-           drawAOIs();
-           vistaModule.addAOIBlock(false);
+           //drawAOIs();
             //vistaModule.generateHeatmap(selectedStimuliName);
         }); 
         

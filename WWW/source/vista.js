@@ -218,10 +218,7 @@ vista = function(
     }
     
     this.showGazePath = function (stimuliName, filter = null) {// olan grafa arka plan koyuyor tek işi bu.
-        alert("heatmapinstanceflag");
-        alert(heatmapInstanceflag);
         if (heatmapInstanceflag == 1) {
-            alert("girdi ve sıfırladı heat datayı");
             heatdata = {
                 max: 0,
                 data: []
@@ -229,7 +226,6 @@ vista = function(
             heatmapInstance.setData(heatdata);
             clearDataforHeatmap();
         }
-        alert("createvisualmap oncesi");
         listener("LOADERSTART");
         if (filter != null && filter.img != null) {
             alert("hello 2");
@@ -494,12 +490,12 @@ vista = function(
         for(var i = 0; data.AOIs.length > i; i++){
             var aoi = data.AOIs[i];
             HTML +=
-                    '<div class="aois inner card-panel hoverable" '+
+                    '<div class="aois inner card-panel hoverable" '+ ///burayi degistiremiyorum, neden inner? 
                     'style="left: ' + toRealX(aoi.startX) + '; '+
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
                     'height: ' + toRealY(aoi.lengthY) + '; '+
-                    'z-index: 3; background-color:' + aoi.rgba + '; " ' + //hangisi onde hangisi arkada olsun diye ga
+                    'z-index: 3; background-color:' + aoi.rgba + '; " ' + //hangisi onde hangisi arkada olsun diye
                     'data-index="' + aoi.index + '">'+
                     '<h5 class="unselectable center-align">' + aoi.index + '</h5>'+
                     '</div>';
@@ -534,8 +530,8 @@ vista = function(
         var backgroundImg = new Image();
         backgroundImg.src = data.categories[findCategoryIndex(stimuliName)].img;
         
-        backgroundImg.onload = function(){
-            var mapImg = $('#map').find('canvas')[0];
+        backgroundImg.onload = function () {
+            var mapImg = $('#map').find('canvas')[1];
 
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext("2d");
@@ -674,14 +670,13 @@ vista = function(
          if (heatmapInstanceflag == 0)
          {
              heatmapInstance = h337.create(
-             {
-            container : document.querySelector('.vis-network'),
-             });
+                 {
+                     container: document.querySelector('.vis-network'),
+                 });
          }
 
         heatdata = heatmapvalues(stimuliInstant);
-        alert("tekrar" + heatdata.max);
-         heatmapInstance.setData(heatdata);
+        heatmapInstance.setData(heatdata);
          
     };
     
@@ -704,25 +699,17 @@ vista = function(
                     y: heatmapDataPoint.h_y_pos[i]
                 };
                 
-                //alert("********************");
-                //alert(heatmapDataPoint.h_x_pos[i]);
-                //alert(point.point_x[i]);
                 maxvalue = Math.max(maxvalue, heatmapDataPoint.h_fix_value[i]);
           
                 hpoints.push(pointh);
-                //alert("points");
-                //alert("yes1"+ points[i].point_x);            
-                //alert("data aktarımı bitti");
-                //alert(point.point_x);
+
         }
-        //alert("yes" + hpoints[1].x);
+
         var hdata = {
             max: maxvalue,
             data: hpoints
         };
 
-       alert("this is max value" + hdata.max);
-       alert("this if first value" + hdata.data[1].x);
        return hdata;
     }
     
