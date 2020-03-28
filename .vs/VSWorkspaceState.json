@@ -1,15 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\node_modules\\jquery",
-    "\\node_modules\\jquery\\dist",
+    "\\dev",
     "\\WWW",
-    "\\WWW\\dependencies",
-    "\\WWW\\dependencies\\heatmap.js-2.0.5",
-    "\\WWW\\dependencies\\heatmap.js-2.0.5\\src",
-    "\\WWW\\dependencies\\heatmap.js-2.0.5\\src\\renderer",
-    "\\WWW\\dependencies\\materialize-css",
-    "\\WWW\\dependencies\\materialize-css\\css"
+    "\\WWW\\css",
+    "\\WWW\\images",
+    "\\WWW\\source"
   ],
   "SelectedNode": "\\WWW\\source\\vista.js",
   "PreviewInSolutionExplorer": false

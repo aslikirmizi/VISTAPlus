@@ -1,14 +1,16 @@
-vista = function(
-        listener,
-        mapContainer,
-        size,
-        staAddress
-        ){
-    
-/* Global Variables STARTS */
+
+vista = function (
+    listener,
+    mapContainer,
+    size,
+    staAddress
+) {
+
+    /* Global Variables STARTS */
     var heatdata;
     var heatmapInstance;
     var heatmapInstanceflag = 0;
+    var animeDiv = [];
 
     var mapOptions = {
         nodes: {
@@ -59,7 +61,8 @@ vista = function(
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
     
     var counter = 0;
-    var counterk=0
+    var counterk = 0
+    var animatedSTAseq = new Array();
     /* Global Variables ENDS */
     
     /* File Module Functions STARTS */
@@ -491,7 +494,8 @@ vista = function(
             var aoi = data.AOIs[i];
             HTML +=
                     '<div class="aois inner card-panel hoverable" '+ ///burayi degistiremiyorum, neden inner? 
-                    'style="left: ' + toRealX(aoi.startX) + '; '+
+                    '<div id="animateID-' + (i + 1) + '" class="aois inner card-panel hoverable" ' +
+                    'style="left: ' + toRealX(aoi.startX) + '; ' +
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
                     'height: ' + toRealY(aoi.lengthY) + '; '+
@@ -567,7 +571,10 @@ vista = function(
         return false;
     };
 
-    function createSTAMap(staSequence){
+    function createSTAMap(staSequence) {
+
+        animatedSTAseq = staSequence;
+
         var areaWeights = new Array();
         var areaNodes = new Array();
         var areaEdges = new vis.DataSet();
@@ -738,9 +745,113 @@ vista = function(
        
         //listener("LOADEREND");
     };
+
     
     // Heatmap generation functions end 
+    /*  ANIMATED STA MAP Starts */
 
-    //listener("LOADEREND");
-    
-}; 
+    this.animatedSTAMap = function (stimuliName, settings, filter) {
+        alert("animated function");
+
+
+        if (animatedSTAseq == null) {
+            animatedSTAseq = getSTAData(stimuliName, settings, filter);  // holds STA sequence result in an array
+        }//If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
+        // holds STA sequence result in an array
+
+        // array that holds the AOI block list with all CSS info as a <div>
+
+        for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
+            animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
+        }
+        alert("anime div length is" + animeDiv.length);
+        alert("anime div0 is" + animeDiv[0]);
+
+        var staResultBlock = [];
+        for (i = 0; i < animatedSTAseq.length; i++) {
+            staResultBlock[i] = animatedSTAseq[i];
+
+        }
+
+        animatedSTAMapAnimate(staResultBlock);
+
+
+        //alert(animatedSTAseq.length);
+
+        //for (i = 0; animatedSTAseq.length > i; i++) {  // loops the STA sequence result
+        //alert("girdi");
+  // shows me the value (the AOI it refers to inside the animeDiv) of that place of sequence
+        //var referredAOIBlock = animeDiv[staResultBlock - 1]; // the
+
+
+        //var elementID = referredAOIBlock.id;
+        //var newElementID = "'#" + elementID + "'";
+        //alert(referredAOIBlock);
+        //alert(idEl);
+        // anime fonksiyonu burada 
+        //for (var k = 0; k < 2; k++) {
+        //    anime({
+        //    targets: animeDiv[k],
+        //    translateY: [
+        //        { value: 200, duration: 500 },
+        //        { value: 0, duration: 500 }
+        //        ]
+        //    }
+        //    );
+
+        //}
+
+    };
+
+    function animatedSTAMapAnimate(n) {
+
+        var tl = anime.timeline({
+            easing: 'easeOutExpo',
+            duration: 750
+        });
+        alert("lenth is");
+        alert(n.length);
+        alert("lenghtenkactim");
+        for (i = 0; i < n.length; i++) {
+            alert(n[i]);
+            tl.add({
+                targets: animeDiv[n[i]],
+                backgroundColor: '#FFF',
+                borderRadius: ['0%', '50%'],
+                easing: 'easeInOutQuad',
+                opacity: .5
+            })
+        }
+        //tl.add({
+        //        targets: animeDiv[0],
+        //        backgroundColor: '#FFF',
+        //        borderRadius: ['0%', '50%'],
+        //        easing: 'easeInOutQuad',
+        //        opacity: .5
+        //    })
+        //    .add({
+        //        targets: animeDiv[1],
+        //        backgroundColor: '#FFF',
+        //        borderRadius: ['0%', '50%'],
+        //        easing: 'easeInOutQuad',
+        //        opacity: .5
+        //    })
+        //    .add({
+        //        targets: animeDiv[2],
+        //        backgroundColor: '#FFF',
+        //        borderRadius: ['0%', '50%'],
+        //        easing: 'easeInOutQuad',
+        //        opacity: .5
+        //    });
+        //anime.timeline({
+        //        targets: animeDiv[n],
+        //        translateY: 200,
+        //        duration: 1000
+        //} 
+        //    );
+
+
+        
+        //listener("LOADEREND");
+    };
+}
