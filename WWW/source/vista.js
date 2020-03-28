@@ -755,7 +755,9 @@ vista = function(
 		alert("animated function");
 		
 		//If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
-		animatedSTAseq = getSTAData(stimuliName,settings,filter);  // holds STA sequence result in an array
+		if(animatedSTAseq == null){
+			animatedSTAseq = getSTAData(stimuliName,settings,filter);  // holds STA sequence result in an array
+		}
 		
 		var animeDiv = new Object(); // array that holds the AOI block list with all CSS info as a <div>
 		
@@ -770,19 +772,17 @@ vista = function(
 			var referredAOIBlock = animeDiv[staResultBlock - 1]; // the
 
 			
-			var elementID = referredAOIBlock.id
-			var newElementID = "'#" + elementID + "'";
+			var elementID = referredAOIBlock.id  // animeID-1
+			var newElementID = "'#" + elementID + "'"; // '#animeID-1'
+			var escapedStr = CSS.escape(newElementID)
 			//alert(elementID);
-			//alert(idEl);
 			// anime fonksiyonu burada 
 			anime({
-				targets: newElementID,
-				translateY: [
-	  				{value: 200, duration: 500 },
-	  				{value: 0, duration: 500 }
-  				]
+				targets: escapedStr,  //getElementAsHTML
+	  			scale: 5
 			});
 		}
+	
 
 	};
 	/* ANIMATED STA MAP Ends */
