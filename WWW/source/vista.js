@@ -54,12 +54,13 @@ vista = function(
 
     };
     
-    
-
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
     
     var counter = 0;
     var counterk=0
+	
+	var animatedSTAseq = new Array();
+	
     /* Global Variables ENDS */
     
     /* File Module Functions STARTS */
@@ -490,7 +491,7 @@ vista = function(
         for(var i = 0; data.AOIs.length > i; i++){
             var aoi = data.AOIs[i];
             HTML +=
-                    '<div class="aois inner card-panel hoverable" '+ ///burayi degistiremiyorum, neden inner? 
+                    '<div id="animateID-' + (i+1) + '" class="aois inner card-panel hoverable" '+ // animated çekmek için id özelliği ekledik
                     'style="left: ' + toRealX(aoi.startX) + '; '+
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
@@ -568,6 +569,9 @@ vista = function(
     };
 
     function createSTAMap(staSequence){
+		
+		animatedSTAseq = staSequence; // the sta sequence array is stored here to be used in the animated sta map
+		
         var areaWeights = new Array();
         var areaNodes = new Array();
         var areaEdges = new vis.DataSet();
@@ -608,7 +612,7 @@ vista = function(
 
     function getSTAData(stimuliName, settings, filter){
         var staInputData = new Object();
-
+		
         for(var i = 0; filter.participants.length > i; i++){
             var participant = filter.participants[i];
             staInputData[participant] = data.main[stimuliName].get({
@@ -617,7 +621,7 @@ vista = function(
                 }
             });
         }
-
+		
         var postData = {
             areaData: data.AOIs,
             rawData: staInputData,
@@ -639,6 +643,7 @@ vista = function(
         });
         
         return JSON.parse(dataResponse);
+		
     }
     /* STA Module Functions ENDS */
     
@@ -746,6 +751,39 @@ vista = function(
 	
 	/*  ANIMATED STA MAP Starts */
 	
-	
+	this.animatedSTAMap = function(stimuliName, settings, filter){
+		alert("animated function");
+		
+		//If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
+		animatedSTAseq = getSTAData(stimuliName,settings,filter);  // holds STA sequence result in an array
+		
+		var animeDiv = new Object(); // array that holds the AOI block list with all CSS info as a <div>
+		
+		for(i=0; data.AOIs.length > i; i++){ // AOI blocks are held inside the array by their order of data-index
+			animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i+1) + "]");
+		}	
+		
+		//alert(animatedSTAseq.length);
+		
+		for(i=0; animatedSTAseq.length > i; i++){  // loops the STA sequence result
+			var staResultBlock = animatedSTAseq[i];  // shows me the value (the AOI it refers to inside the animeDiv) of that place of sequence
+			var referredAOIBlock = animeDiv[staResultBlock - 1]; // the
+
+			
+			var elementID = referredAOIBlock.id
+			var newElementID = "'#" + elementID + "'";
+			//alert(elementID);
+			//alert(idEl);
+			// anime fonksiyonu burada 
+			anime({
+				targets: newElementID,
+				translateY: [
+	  				{value: 200, duration: 500 },
+	  				{value: 0, duration: 500 }
+  				]
+			});
+		}
+
+	};
 	/* ANIMATED STA MAP Ends */
 }; 

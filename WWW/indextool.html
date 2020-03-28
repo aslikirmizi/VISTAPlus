@@ -7,15 +7,15 @@
     <script src="dependencies/materialize-css/js/materialize.min.js"></script>
     <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
     <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
+	<script src="dependencies/anime-master/lib/anime.js"></script>  <!-- animated sta map library -->
+	<script src="dependencies/anime-master/lib/anime.min.js"></script>  <!-- animated sta map library -->
+	<script src="dependencies/anime-master/lib/anime.es.js"></script>  <!-- animated sta map library -->
     
-   
-
     <link rel="stylesheet" href="dependencies/vis/vis-network.min.css">
     <link rel="stylesheet" href="dependencies/materialize-css/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="dependencies/vistaplus.css">
     
-
     <script src="source/vista.js"></script><!--source code-->
     <link rel="stylesheet" href="source/vista.css">
     <meta charset="utf-8" />
@@ -60,34 +60,7 @@
         </div>
 
     </section>
-    <!-- TOP SECTION BUTTONS ENDED-->
-    <!-- NOT WORKING PROPERLY
-        <nav class="nav-extended white">
-
-            <div class="nav-wrapper">
-
-
-                <div style="padding: 5px;" class="col s12">
-
-                    <div id="bannerimage"></div>
-                </div>
-
-            </div>
-
-            <div class="nav-content">
-
-
-                <a href="" download="save.png" id="imageDownloadTrigger" style="margin-right: 60px;" class="btn-floating btn-large halfway-fab waves-effect waves-light teal amber hide">
-                    <i class="material-icons unselectable">get_app</i>
-                </a>
-                <a id="dataSelectionTrigger" class="modal-trigger buttonk button1 hide"
-                    href="#dataSelectionModal">
-                    <i class="material-icons unselectable">list</i>
-                </a>
-            </div>
-        </nav>
-    -->
-
+ 
     <div class="row">
 
         <div class="col s12">
@@ -126,9 +99,6 @@ AOIs are selected.</pre>
                             <a href="#"><font color="#000000"></font></a>
                         </div>
                     </li>
-
-
-
                     <!-- heatmap function will be binded to here-->
                 </ul>
                 <!-- SELECTION PART ENDED-->
@@ -205,46 +175,6 @@ AOIs are selected.</pre>
     </div>
 
 
-    <!--<div style="left:30%; top:10%">
-        <label id="dataAddTrigger" class="buttonk button1" style="vertical-align:middle">
-            <span> Click Here To Add Data! </span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
-                                                         multiple />
-        </label>
-    </div>-->
-    <!--<div class="fixed-action-btn" style="left:50%; top:50%">
-        <div id="managementModal" style="right: 35px;top:500px">
-                   <a
-                   id="managementTrigger" class="buttonk button1" href="#managementModal">
-                <span>Preferences</span>
-                   </a>
-        </div>
-    </div>
-
-
-    <div class="fixed-action-btn" style="left:65%; top:50%">
-               <a
-                  id="dataSelectionTrigger" class="modal-trigger buttonk button1 hide"
-           href="#dataSelectionModal">
-            <span>Select Stimuli</span>
-               </a>
-    </div>-->
-    <!--
-        <ul>
-            <li>
-                <label id="dataAddTrigger" class="btn-floating blue waves-effect waves-light">
-                    <input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)'
-                        multiple />
-                    <i class="material-icons unselectable">add</i>
-                </label>
-
-            </li>
-            <li>
-                <a id="managementTrigger" class="modal-trigger btn-floating yellow waves-effect waves-light" href="#managementModal">
-                    <i class="material-icons unselectable">build</i>
-                </a>
-            </li>
-        </ul>
-    -->
     <!-- Stimuli Viewing Section -->
     <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer" >
         <div class="modal-content black-text">
@@ -440,11 +370,11 @@ AOIs are selected.</pre>
     function controlVisualMethods() {
         if (!vistaModule.isSTAMAPApplicable()) {
             $('#methodSTAMap').addClass("disabled");
-           //$('methodSTAMap').removeClass("disabled"); // atacan
+			$('methodAnimatedSTA').addClass("disabled"); // animated
         } else {
             $('#methodSTAMap').removeClass("disabled");
             $('#toolbox').hide();
-          //  $('#methodHeatMap').addClass("disabled"); //atacan
+			$('#methodAnimatedSTA').removeClass("disabled"); // animated
         }
     }
 
@@ -584,6 +514,12 @@ AOIs are selected.</pre>
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
                     }
+					else if (selectedVisualMethod == "AnimatedSTA"){
+						//clearAOIs();
+						// ANIMATED FUNCTIONS WILL BE BINDED HERE
+						vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
+					}
+					
                     //prevVisualMethod = selectedVisualMethod;
                     $(this).parent().find("a").removeClass("active");
                     $(this).find("li").addClass("active");
