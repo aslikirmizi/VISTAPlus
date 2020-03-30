@@ -753,11 +753,7 @@ vista = function (
 
     this.animatedSTAMap = function (stimuliName, settings, filter) {
         alert("animated function");
-		
-		// If the user selects Animated STA Map before the STA Map, the seq var will be empty so we call the sequence function here
-        if (animatedSTAseq == null) {
-            animatedSTAseq = getSTAData(stimuliName, settings, filter);  
-        }
+        animatedSTAseq = getSTAData(stimuliName, settings, filter);  
         
         // array that holds the AOI block list with all CSS info as a <div>
         for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
