@@ -1,14 +1,16 @@
-vista = function(
-        listener,
-        mapContainer,
-        size,
-        staAddress
-        ){
-    
-/* Global Variables STARTS */
+
+vista = function (
+    listener,
+    mapContainer,
+    size,
+    staAddress
+) {
+
+    /* Global Variables STARTS */
     var heatdata;
     var heatmapInstance;
     var heatmapInstanceflag = 0;
+    var animeDiv = [];
 
     var mapOptions = {
         nodes: {
@@ -59,7 +61,8 @@ vista = function(
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
     
     var counter = 0;
-    var counterk=0
+    var counterk = 0
+    var animatedSTAseq = new Array();
     /* Global Variables ENDS */
     
     /* File Module Functions STARTS */
@@ -491,7 +494,8 @@ vista = function(
             var aoi = data.AOIs[i];
             HTML +=
                     '<div class="aois inner card-panel hoverable" '+ ///burayi degistiremiyorum, neden inner? 
-                    'style="left: ' + toRealX(aoi.startX) + '; '+
+                    '<div id="animateID-' + (i + 1) + '" class="aois inner card-panel hoverable" ' +
+                    'style="left: ' + toRealX(aoi.startX) + '; ' +
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
                     'height: ' + toRealY(aoi.lengthY) + '; '+
@@ -567,7 +571,10 @@ vista = function(
         return false;
     };
 
-    function createSTAMap(staSequence){
+    function createSTAMap(staSequence) {
+
+        animatedSTAseq = staSequence;
+
         var areaWeights = new Array();
         var areaNodes = new Array();
         var areaEdges = new vis.DataSet();
@@ -738,9 +745,46 @@ vista = function(
        
         //listener("LOADEREND");
     };
+
     
     // Heatmap generation functions end 
+	
+    /*  ANIMATED STA MAP Starts */
 
-    //listener("LOADEREND");
-    
-}; 
+    this.animatedSTAMap = function (stimuliName, settings, filter) {
+        alert("animated function");
+        animatedSTAseq = getSTAData(stimuliName, settings, filter);  
+        
+        // array that holds the AOI block list with all CSS info as a <div>
+        for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
+            animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
+        }
+		
+		// The STA Sequence result will be kept in this variable
+        var staResultBlock = []; 
+        for (i = 0; i < animatedSTAseq.length; i++) {
+            staResultBlock[i] = animatedSTAseq[i]; // holds STA sequence result in an array
+        }
+
+        animatedSTAMapAnimate(staResultBlock);
+    };
+
+    function animatedSTAMapAnimate(n) {
+		alert("function: animatedSTAMapAnimate");
+		alert(n);
+		
+        var tl = anime.timeline({
+            easing: 'easeOutExpo',
+            duration: 750
+        });
+        
+        for (i = 0; i < n.length; i++) {
+            tl.add({
+                targets: animeDiv[n[i]-1],
+                backgroundColor: '#000',
+                borderRadius: ['0%', '50%'],
+                easing: 'easeInOutQuad',
+            })
+        }
+    };
+}
