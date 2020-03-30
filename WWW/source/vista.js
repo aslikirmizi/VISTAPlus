@@ -748,110 +748,47 @@ vista = function (
 
     
     // Heatmap generation functions end 
+	
     /*  ANIMATED STA MAP Starts */
 
     this.animatedSTAMap = function (stimuliName, settings, filter) {
         alert("animated function");
-
-
+		
+		// If the user selects Animated STA Map before the STA Map, the seq var will be empty so we call the sequence function here
         if (animatedSTAseq == null) {
-            animatedSTAseq = getSTAData(stimuliName, settings, filter);  // holds STA sequence result in an array
-        }//If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
-        // holds STA sequence result in an array
-
+            animatedSTAseq = getSTAData(stimuliName, settings, filter);  
+        }
+        
         // array that holds the AOI block list with all CSS info as a <div>
-
         for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
             animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
         }
-        alert("anime div length is" + animeDiv.length);
-        alert("anime div0 is" + animeDiv[0]);
-
-        var staResultBlock = [];
+		
+		// The STA Sequence result will be kept in this variable
+        var staResultBlock = []; 
         for (i = 0; i < animatedSTAseq.length; i++) {
-            staResultBlock[i] = animatedSTAseq[i];
-
+            staResultBlock[i] = animatedSTAseq[i]; // holds STA sequence result in an array
         }
 
         animatedSTAMapAnimate(staResultBlock);
-
-
-        //alert(animatedSTAseq.length);
-
-        //for (i = 0; animatedSTAseq.length > i; i++) {  // loops the STA sequence result
-        //alert("girdi");
-  // shows me the value (the AOI it refers to inside the animeDiv) of that place of sequence
-        //var referredAOIBlock = animeDiv[staResultBlock - 1]; // the
-
-
-        //var elementID = referredAOIBlock.id;
-        //var newElementID = "'#" + elementID + "'";
-        //alert(referredAOIBlock);
-        //alert(idEl);
-        // anime fonksiyonu burada 
-        //for (var k = 0; k < 2; k++) {
-        //    anime({
-        //    targets: animeDiv[k],
-        //    translateY: [
-        //        { value: 200, duration: 500 },
-        //        { value: 0, duration: 500 }
-        //        ]
-        //    }
-        //    );
-
-        //}
-
     };
 
     function animatedSTAMapAnimate(n) {
-
+		alert("function: animatedSTAMapAnimate");
+		alert(n);
+		
         var tl = anime.timeline({
             easing: 'easeOutExpo',
             duration: 750
         });
-        alert("lenth is");
-        alert(n.length);
-        alert("lenghtenkactim");
+        
         for (i = 0; i < n.length; i++) {
-            alert(n[i]);
             tl.add({
-                targets: animeDiv[n[i]],
-                backgroundColor: '#FFF',
+                targets: animeDiv[n[i]-1],
+                backgroundColor: '#000',
                 borderRadius: ['0%', '50%'],
                 easing: 'easeInOutQuad',
-                opacity: .5
             })
         }
-        //tl.add({
-        //        targets: animeDiv[0],
-        //        backgroundColor: '#FFF',
-        //        borderRadius: ['0%', '50%'],
-        //        easing: 'easeInOutQuad',
-        //        opacity: .5
-        //    })
-        //    .add({
-        //        targets: animeDiv[1],
-        //        backgroundColor: '#FFF',
-        //        borderRadius: ['0%', '50%'],
-        //        easing: 'easeInOutQuad',
-        //        opacity: .5
-        //    })
-        //    .add({
-        //        targets: animeDiv[2],
-        //        backgroundColor: '#FFF',
-        //        borderRadius: ['0%', '50%'],
-        //        easing: 'easeInOutQuad',
-        //        opacity: .5
-        //    });
-        //anime.timeline({
-        //        targets: animeDiv[n],
-        //        translateY: 200,
-        //        duration: 1000
-        //} 
-        //    );
-
-
-        
-        //listener("LOADEREND");
     };
 }
