@@ -29,13 +29,14 @@
 </head>
 
 <body>
+
     <!-- TOP SECTION MANAGEMENT BUTTONS-->
     <section id="home" class="video-hero" style="height: 100px; background-image: url(images/deneme.jpg);  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
 
         <div class="buttonkk" style="left:30%; top:5%">
             <label id="dataAddTrigger" class="buttonk button1" style="vertical-align:middle">
                 <span> Click Here To Add Data!</span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
-                                                             multiple />
+                                                            multiple />
             </label>
         </div>
 
@@ -95,7 +96,7 @@
 
         <div class="col s12">
 
-            <div style="padding: 0px" class="card-panel outer" >
+            <div style="padding: 0px" class="card-panel outer">
 
 
                 <!-- VISUALISATION METHOD SELECTION-->
@@ -113,10 +114,10 @@
                         </div>
                     </li>
 
-                    <li id="methodSTAMap" data-type="STAMAP"class="tooltip buttona buttona1">
+                    <li id="methodSTAMap" data-type="STAMAP" class="tooltip buttona buttona1">
                         <div class="active">
                             STA<span class="tooltiptext" id="toolbox">
-                            <pre>Not activated until
+                                <pre>Not activated until
 AOIs are selected.</pre>
                             </span>
                             <a href="#"><font color="#000000"></font></a>
@@ -142,7 +143,7 @@ AOIs are selected.</pre>
                         <div class="inner" id="map" style="z-index: 2;"></div>
                         <!-- innerı backgroundın içine alınca heatmap aşağı gitmiyor artık bg üzerine geliyor -->
                     </div>
-                   
+
                     <!-- arkaplan -->
                     <!-- gazepath buraya canvas yaratıyor -->
                     <!-- heatmap buraya gelmeli -->
@@ -249,7 +250,7 @@ AOIs are selected.</pre>
         </ul>
     -->
     <!-- Stimuli Viewing Section -->
-    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer" >
+    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer">
         <div class="modal-content black-text">
             <h4 style="text-align:center;">List of Detected Stimulis</h4>
             <p style="text-align:center;">Please select a stimuli from the list below.</p>
@@ -583,12 +584,12 @@ AOIs are selected.</pre>
                     
                     else if (selectedVisualMethod == "STAMAP") {
                         $(".heatmap-canvas").hide();
-                        clearAOIs();
+                        //clearAOIs();
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
                     }
-                    else if (selectedVisualMethod == "AnimatedSTA"){
-						//clearAOIs();
+                    else if (selectedVisualMethod == "AnimatedSTA") {
+                        drawAOIs();
 						// ANIMATED FUNCTIONS WILL BE BINDED HERE
 						vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
 					}
@@ -601,8 +602,6 @@ AOIs are selected.</pre>
 
         $('#methodHeatMap').on("click", function () {
            resetForHeatmapMethod();
-           //drawAOIs();
-            //vistaModule.generateHeatmap(selectedStimuliName);
         }); 
         
         $('#menuTrigger').on('click', function (event) {

@@ -1,3 +1,4 @@
+import html2canvas from 'html2canvas';
 
 vista = function (
     listener,
@@ -56,7 +57,9 @@ vista = function (
 
     };
     
-    
+    html2canvas(document.body).then(function (canvas) {
+        document.body.appendChild(canvas);
+    });
 
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
     
@@ -381,7 +384,7 @@ vista = function (
         } else{
         }
     }
-    
+
     function fetchPageTitleToData(titleAddress){
         var title;
         $.ajax({
@@ -494,7 +497,8 @@ vista = function (
             var aoi = data.AOIs[i];
             HTML +=
                     '<div class="aois inner card-panel hoverable" '+ ///burayi degistiremiyorum, neden inner? 
-                    '<div id="animateID-' + (i + 1) + '" class="aois inner card-panel hoverable" ' +
+                    //'<div id="animateID-' + (i + 1) + '" class="aois inner card-panel hoverable" ' +
+                    '<div id="animateID' + '" class="aois inner card-panel hoverable" ' +
                     'style="left: ' + toRealX(aoi.startX) + '; ' +
                     'top: ' + toRealY(aoi.startY) + '; '+
                     'width: ' + toRealX(aoi.lengthX) + '; '+
@@ -558,7 +562,8 @@ vista = function (
     /* Other Modules Functions STARTS */
     
     /* STA Module Functions STARTS */
-    this.showSTAMap = function(stimuliName, settings, filter){
+    this.showSTAMap = function (stimuliName, settings, filter) {
+        $('.aois').hide();
         listener("LOADERSTART");
         createVisualMap(createSTAMap(getSTAData(stimuliName,settings,filter)));
         listener("LOADEREND");
@@ -751,12 +756,17 @@ vista = function (
     /*  ANIMATED STA MAP Starts */
 
     this.animatedSTAMap = function (stimuliName, settings, filter) {
-        alert("animated function");
+        mapData.nodes.clear();
+        mapData.edges.clear();
 
-
-        if (animatedSTAseq == null) {
-            animatedSTAseq = getSTAData(stimuliName, settings, filter);  // holds STA sequence result in an array
-        }//If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
+        if ($('.aois').is(":hidden")) {
+            //alert("sakliii");
+            $('.aois').show();
+        }
+        
+       
+        animatedSTAseq = getSTAData(stimuliName, settings, filter);  // holds STA sequence result in an array
+        //If the user chooses to see the animated sta map directly (without seeing the sta map first), we need to declare the array values here again
         // holds STA sequence result in an array
 
         // array that holds the AOI block list with all CSS info as a <div>
@@ -764,8 +774,9 @@ vista = function (
         for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
             animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
         }
-        alert("anime div length is" + animeDiv.length);
-        alert("anime div0 is" + animeDiv[0]);
+
+        //alert("anime div length is" + animeDiv.length);
+        //alert("anime div0 is" + animeDiv[0]);
 
         var staResultBlock = [];
         for (i = 0; i < animatedSTAseq.length; i++) {
@@ -804,18 +815,15 @@ vista = function (
     };
 
     function animatedSTAMapAnimate(n) {
-
+        alert(n);
         var tl = anime.timeline({
             easing: 'easeOutExpo',
             duration: 750
         });
-        alert("lenth is");
-        alert(n.length);
-        alert("lenghtenkactim");
+
         for (i = 0; i < n.length; i++) {
-            alert(n[i]);
             tl.add({
-                targets: animeDiv[n[i]],
+                targets: animeDiv[n[i] - 1],
                 backgroundColor: '#FFF',
                 borderRadius: ['0%', '50%'],
                 easing: 'easeInOutQuad',
