@@ -334,7 +334,7 @@ AOIs are selected.</pre>
 
     var discovery = true;
     var selectedStimuliName = "";
-    
+
     var selectedVisualMethod;
     var prevVisualMethod = "";
     var filter = new Array();
@@ -394,16 +394,16 @@ AOIs are selected.</pre>
 
             liHTML +=
                 '<div style="padding: 25px;" class="input-field col s12">' +
-                '<h9>You can also browse and upload a stimuli from your computer.</h9>'+
+                '<h9>You can also browse and upload a stimuli from your computer.</h9>' +
                 '<div class="file-field input-field">' +
                 '<div class="waves-effect waves-light btn red">' +
-                '<i class="material-icons">insert_photo</i>'+
+                '<i class="material-icons">insert_photo</i>' +
                 '<input class="imgurl" placeholder="Image URL" data-name="' + element["name"] + '" id="' + element["name"] + '_IMG" type="file">' +
-                '</div>'+
-                '<div class="file-path-wrapper">'+
-                '<input id="' + element["name"] + '_URL" class="file-path validate" type="text" value="">'+
-                '</div>'+
-                '</div>'+
+                '</div>' +
+                '<div class="file-path-wrapper">' +
+                '<input id="' + element["name"] + '_URL" class="file-path validate" type="text" value="">' +
+                '</div>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</form>' +
@@ -478,9 +478,9 @@ AOIs are selected.</pre>
     function clearAOIs() {
         $('.vis-network').parent().find('.aois').remove();
     }
-    
+
     function prependEle(parent, child) {
-          parent.insertBefore(child, parent.firstChild);
+        parent.insertBefore(child, parent.firstChild);
     }
 
     function drawAOIs() {
@@ -550,7 +550,7 @@ AOIs are selected.</pre>
 
             if (file) {
                 var reader = new FileReader();
-                reader.onload = function(){
+                reader.onload = function () {
                     filter[name].img = reader.result;
                 }
                 reader.readAsDataURL(file);
@@ -565,23 +565,22 @@ AOIs are selected.</pre>
                 selectedVisualMethod = $(this).data("type");
                 if (selectedVisualMethod != prevVisualMethod) {
 
-                    if (selectedVisualMethod == "GAZEPATH")
-                    {
+                    if (selectedVisualMethod == "GAZEPATH") {
                         resetVisualMethods();
                         drawAOIs();
                         vistaModule.showGazePath(selectedStimuliName);
                         vistaModule.addAOIBlock(false);
-                    } 
+                    }
                     else if (selectedVisualMethod == "HEATMAP") {
                         if ($(".heatmap-canvas").is(":hidden"))
                             $(".heatmap-canvas").show();
                         drawAOIs();
                         vistaModule.generateHeatmap(selectedStimuliName);
-                        $( ".heatmap-canvas" ).prependTo( $( ".vis-network" ) );
+                        $(".heatmap-canvas").prependTo($(".vis-network"));
                         //vistaModule.addAOIBlock(false);
                         prevVisualMethod = "HEATMAP";
                     }
-                    
+
                     else if (selectedVisualMethod == "STAMAP") {
                         $(".heatmap-canvas").hide();
                         //clearAOIs();
@@ -590,9 +589,9 @@ AOIs are selected.</pre>
                     }
                     else if (selectedVisualMethod == "AnimatedSTA") {
                         drawAOIs();
-						// ANIMATED FUNCTIONS WILL BE BINDED HERE
-						vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
-					}
+                        // ANIMATED FUNCTIONS WILL BE BINDED HERE
+                        vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
+                    }
                     //prevVisualMethod = selectedVisualMethod;
                     $(this).parent().find("a").removeClass("active");
                     $(this).find("li").addClass("active");
@@ -601,12 +600,11 @@ AOIs are selected.</pre>
         });
 
         $('#methodHeatMap').on("click", function () {
-           resetForHeatmapMethod();
-        }); 
-        
+            resetForHeatmapMethod();
+        });
+
         $('#menuTrigger').on('click', function (event) {
-            if (discovery == true)
-            {
+            if (discovery == true) {
                 $('#menuTriggerTab').tapTarget('close');
                 event.preventDefault();
             }
@@ -676,7 +674,7 @@ AOIs are selected.</pre>
         $('#setting_distance').val(settings.sta.distance);
         $('#setting_daccuracy').val(settings.sta.daccuracy);
         $('#setting_tolarancelevel').val(settings.sta.tlevel);
-        $('#setting_higestfidelity').prop('checked',settings.sta.hfidelity);
+        $('#setting_higestfidelity').prop('checked', settings.sta.hfidelity);
 
         //Handles resize event
         $(window).bind('resize', function (event) {
@@ -684,7 +682,7 @@ AOIs are selected.</pre>
                 clearTimeout(window.RT);
             }
             window.RT = setTimeout(function () {
-                
+
                 this.location.reload(false);
             }, 100);
         });
