@@ -29,13 +29,14 @@
 </head>
 
 <body>
+
     <!-- TOP SECTION MANAGEMENT BUTTONS-->
     <section id="home" class="video-hero" style="height: 100px; background-image: url(images/deneme.jpg);  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
 
         <div class="buttonkk" style="left:30%; top:5%">
             <label id="dataAddTrigger" class="buttonk button1" style="vertical-align:middle">
                 <span> Click Here To Add Data!</span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
-                                                             multiple />
+                                                            multiple />
             </label>
         </div>
 
@@ -95,7 +96,7 @@
 
         <div class="col s12">
 
-            <div style="padding: 0px" class="card-panel outer" >
+            <div style="padding: 0px" class="card-panel outer">
 
 
                 <!-- VISUALISATION METHOD SELECTION-->
@@ -113,10 +114,10 @@
                         </div>
                     </li>
 
-                    <li id="methodSTAMap" data-type="STAMAP"class="tooltip buttona buttona1">
+                    <li id="methodSTAMap" data-type="STAMAP" class="tooltip buttona buttona1">
                         <div class="active">
                             STA<span class="tooltiptext" id="toolbox">
-                            <pre>Not activated until
+                                <pre>Not activated until
 AOIs are selected.</pre>
                             </span>
                             <a href="#"><font color="#000000"></font></a>
@@ -142,7 +143,7 @@ AOIs are selected.</pre>
                         <div class="inner" id="map" style="z-index: 2;"></div>
                         <!-- innerı backgroundın içine alınca heatmap aşağı gitmiyor artık bg üzerine geliyor -->
                     </div>
-                   
+
                     <!-- arkaplan -->
                     <!-- gazepath buraya canvas yaratıyor -->
                     <!-- heatmap buraya gelmeli -->
@@ -249,7 +250,7 @@ AOIs are selected.</pre>
         </ul>
     -->
     <!-- Stimuli Viewing Section -->
-    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer" >
+    <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer">
         <div class="modal-content black-text">
             <h4 style="text-align:center;">List of Detected Stimulis</h4>
             <p style="text-align:center;">Please select a stimuli from the list below.</p>
@@ -333,7 +334,7 @@ AOIs are selected.</pre>
 
     var discovery = true;
     var selectedStimuliName = "";
-    
+
     var selectedVisualMethod;
     var prevVisualMethod = "";
     var filter = new Array();
@@ -393,16 +394,16 @@ AOIs are selected.</pre>
 
             liHTML +=
                 '<div style="padding: 25px;" class="input-field col s12">' +
-                '<h9>You can also browse and upload a stimuli from your computer.</h9>'+
+                '<h9>You can also browse and upload a stimuli from your computer.</h9>' +
                 '<div class="file-field input-field">' +
                 '<div class="waves-effect waves-light btn red">' +
-                '<i class="material-icons">insert_photo</i>'+
+                '<i class="material-icons">insert_photo</i>' +
                 '<input class="imgurl" placeholder="Image URL" data-name="' + element["name"] + '" id="' + element["name"] + '_IMG" type="file">' +
-                '</div>'+
-                '<div class="file-path-wrapper">'+
-                '<input id="' + element["name"] + '_URL" class="file-path validate" type="text" value="">'+
-                '</div>'+
-                '</div>'+
+                '</div>' +
+                '<div class="file-path-wrapper">' +
+                '<input id="' + element["name"] + '_URL" class="file-path validate" type="text" value="">' +
+                '</div>' +
+                '</div>' +
                 '</div>' +
                 '</div>' +
                 '</form>' +
@@ -477,9 +478,9 @@ AOIs are selected.</pre>
     function clearAOIs() {
         $('.vis-network').parent().find('.aois').remove();
     }
-    
+
     function prependEle(parent, child) {
-          parent.insertBefore(child, parent.firstChild);
+        parent.insertBefore(child, parent.firstChild);
     }
 
     function drawAOIs() {
@@ -549,7 +550,7 @@ AOIs are selected.</pre>
 
             if (file) {
                 var reader = new FileReader();
-                reader.onload = function(){
+                reader.onload = function () {
                     filter[name].img = reader.result;
                 }
                 reader.readAsDataURL(file);
@@ -564,34 +565,33 @@ AOIs are selected.</pre>
                 selectedVisualMethod = $(this).data("type");
                 if (selectedVisualMethod != prevVisualMethod) {
 
-                    if (selectedVisualMethod == "GAZEPATH")
-                    {
+                    if (selectedVisualMethod == "GAZEPATH") {
                         resetVisualMethods();
                         drawAOIs();
                         vistaModule.showGazePath(selectedStimuliName);
                         vistaModule.addAOIBlock(false);
-                    } 
+                    }
                     else if (selectedVisualMethod == "HEATMAP") {
                         if ($(".heatmap-canvas").is(":hidden"))
                             $(".heatmap-canvas").show();
                         drawAOIs();
                         vistaModule.generateHeatmap(selectedStimuliName);
-                        $( ".heatmap-canvas" ).prependTo( $( ".vis-network" ) );
+                        $(".heatmap-canvas").prependTo($(".vis-network"));
                         //vistaModule.addAOIBlock(false);
                         prevVisualMethod = "HEATMAP";
                     }
-                    
+
                     else if (selectedVisualMethod == "STAMAP") {
                         $(".heatmap-canvas").hide();
-                        clearAOIs();
+                        //clearAOIs();
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
                     }
-                    else if (selectedVisualMethod == "AnimatedSTA"){
-						//clearAOIs();
-						// ANIMATED FUNCTIONS WILL BE BINDED HERE
-						vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
-					}
+                    else if (selectedVisualMethod == "AnimatedSTA") {
+                        drawAOIs();
+                        // ANIMATED FUNCTIONS WILL BE BINDED HERE
+                        vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
+                    }
                     //prevVisualMethod = selectedVisualMethod;
                     $(this).parent().find("a").removeClass("active");
                     $(this).find("li").addClass("active");
@@ -600,14 +600,11 @@ AOIs are selected.</pre>
         });
 
         $('#methodHeatMap').on("click", function () {
-           resetForHeatmapMethod();
-           //drawAOIs();
-            //vistaModule.generateHeatmap(selectedStimuliName);
-        }); 
-        
+            resetForHeatmapMethod();
+        });
+
         $('#menuTrigger').on('click', function (event) {
-            if (discovery == true)
-            {
+            if (discovery == true) {
                 $('#menuTriggerTab').tapTarget('close');
                 event.preventDefault();
             }
@@ -677,7 +674,7 @@ AOIs are selected.</pre>
         $('#setting_distance').val(settings.sta.distance);
         $('#setting_daccuracy').val(settings.sta.daccuracy);
         $('#setting_tolarancelevel').val(settings.sta.tlevel);
-        $('#setting_higestfidelity').prop('checked',settings.sta.hfidelity);
+        $('#setting_higestfidelity').prop('checked', settings.sta.hfidelity);
 
         //Handles resize event
         $(window).bind('resize', function (event) {
@@ -685,7 +682,7 @@ AOIs are selected.</pre>
                 clearTimeout(window.RT);
             }
             window.RT = setTimeout(function () {
-                
+
                 this.location.reload(false);
             }, 100);
         });
