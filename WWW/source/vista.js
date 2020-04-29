@@ -55,13 +55,15 @@ vista = function (
 
     };
 
-
-
     var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
 
     var counter = 0;
     var counterk = 0
     var animatedSTAseq = new Array();
+	
+	var animatedRemovedAOIarray = new Array();
+	
+	
     /* Global Variables ENDS */
 
     /* File Module Functions STARTS */
@@ -479,6 +481,24 @@ vista = function (
 
     function removeAOI(index) {
         data.AOIs.splice(getAOIIndex(index), 1);
+		var i = 0;
+		var checker = 0;
+		
+		if(animatedRemovedAOIarray.length == 0)
+			animatedRemovedAOIarray.push(index);
+		else{
+			for(i = 0; i < animatedRemovedAOIarray.length; i++){
+				if(animatedRemovedAOIarray[i] == index)
+					checker = 1;
+				
+			}
+			
+		if(checker != 1)
+			animatedRemovedAOIarray.push(index); // animated için koyduk, divAnime düzelmiş oldu, 4/29/2020
+			
+		}
+		
+		
         listener("UPDATEAOIS");
     }
 
@@ -492,8 +512,7 @@ vista = function (
         for (var i = 0; data.AOIs.length > i; i++) {
             var aoi = data.AOIs[i];
             HTML +=
-                '<div class="aois inner card-panel hoverable" ' + ///burayi degistiremiyorum, neden inner? 
-                //'<div id="animateID-' + (i + 1) + '" class="aois inner card-panel hoverable" ' +
+                '<div class="aois inner card-panel hoverable" ' + 
                 '<div id="animateID' + '" class="aois inner card-panel hoverable" ' +
                 'style="left: ' + toRealX(aoi.startX) + '; ' +
                 'top: ' + toRealY(aoi.startY) + '; ' +
@@ -501,30 +520,30 @@ vista = function (
                 'height: ' + toRealY(aoi.lengthY) + '; ' +
                 'z-index: 3; background-color:' + aoi.rgba + '; " ' + //hangisi onde hangisi arkada olsun diye
                 'data-index="' + aoi.index + '">' +
-                '<h5 class="unselectable center-align">' + aoi.index + '</h5>' +
+                '<h5 class="unselectable center-aoi">' + aoi.index + '</h5>' +
                 '</div>';
-        }  //her bir AOI için div oluşuyor, backgorund color değişiyor
+	        }  //her bir AOI için div oluşuyor, backgorund color değişiyor
 
         return HTML;
     }
 
     function getRandomColor() {
-        var colors = [
-            "red", "pink", "purple", "deep-purple", "indigo", "blue",
-            "light-blue", "cyan", "teal", "green", "light-green", "lime",
-            "yellow", "amber", "orange", "deep-orange"
-        ];
+		
+		var colors = [
+			"pink", "purple", "deep-purple", "indigo", "blue", "cyan"
+		];
+		
         var tones = [
             "lighten-5", "lighten-4", "lighten-3", "lighten-2", "lighten-1",
             "darken-1", "darken-2", "darken-3", "darken-4",
             "accent-1", "accent-2", "accent-3", "accent-4"
         ];
-
-        var color = colors[Math.floor((Math.random() * 16))];
+		
+		var color = colors[Math.floor((Math.random() * 6))];
         var tone = tones[Math.floor((Math.random() * 13))];
-
+		
         $('#map').append('<div id="tempforcolor" class="hidden ' + color + ' ' + tone + '"></div>');
-        var rgb = $('#tempforcolor').css("background-color");
+		var rgb = $('#tempforcolor').css("background-color");
         $('#tempforcolor').remove();
 
         return rgb;
@@ -741,8 +760,6 @@ vista = function (
         }
 
         heatmapInstanceflag = 1;
-        //alert("bak:");
-        //alert(heatmapDataPoint.h_x_pos[2]);
 
         //listener("LOADEREND");
     };
@@ -757,17 +774,57 @@ vista = function (
         mapData.edges.clear();
 
         if ($('.aois').is(":hidden")) {
-            //alert("sakliii");
             $('.aois').show();
         }
 
         animatedSTAseq = getSTAData(stimuliName, settings, filter);
-
+		
+		animatedRemovedAOIarray.sort();
+		alert(animatedRemovedAOIarray);
+		
+		
+		var tempRemovedArray = new Array();
+		var control = 0;
+		
+		if(animatedRemovedAOIarray.length != 0){  // Buradaki hatayı çözün.
+			for(var i = 0; i < animatedRemovedAOIarray.length; i++){
+				for(var j = 0; j < data.AOIs.length; j++){
+					if(animatedRemovedAOIarray[i] != data.AOIs[j]){
+						control = control + 1;
+					}	
+					if(control == data.AOIs.length){
+						tempRemovedArray.push(animatedRemovedAOIarray[i]);
+					}
+				}
+				control = 0;
+			}
+		}
+		
+		
+		alert("***");
+		alert(tempRemovedArray);
+		animatedRemovedAOIarray = tempRemovedArray;		
+		alert("eşitlik");
+		alert(animatedRemovedAOIarray);
+		
+		var temp = 0; // divAnime'deki boşluklar için yaratılan bir temp
+		
         // array that holds the AOI block list with all CSS info as a <div>
-        for (var i = 0; data.AOIs.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
-            animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
+        for (var i = 0; data.AOIs.length + animatedRemovedAOIarray.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
+            if(animatedRemovedAOIarray.length == 0)
+				animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
+			else{
+				if(i == animatedRemovedAOIarray[temp]-1){
+					animeDiv[i] = 0;
+					temp++;
+				}
+				else{
+					animeDiv[i] = document.querySelector("[data-index=" + CSS.escape(i + 1) + "]");
+				}
+			}		
         }
-
+			
+		
         // The STA Sequence result will be kept in this variable
         var staResultBlock = [];
         for (i = 0; i < animatedSTAseq.length; i++) {
@@ -778,9 +835,10 @@ vista = function (
     };
 
     function animatedSTAMapAnimate(n) {
-        alert("function: animatedSTAMapAnimate");
+        //alert("function: animatedSTAMapAnimate");
         alert(n);
-
+		alert("The animation will begin right now.");
+		
         var tl = anime.timeline({
             easing: 'easeOutExpo',
             duration: 750
@@ -789,10 +847,11 @@ vista = function (
         for (i = 0; i < n.length; i++) {
             tl.add({
                 targets: animeDiv[n[i] - 1],
-                backgroundColor: '#000',
-                borderRadius: ['0%', '50%'],
+                backgroundColor: '#000000',
                 easing: 'easeInOutQuad',
-            })
+				borderRadius: ['0%', '30%'],
+				opacity: '60%'
+            }, '+=800')
         }
     };
 }

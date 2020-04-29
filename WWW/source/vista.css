@@ -55,3 +55,12 @@ body {
     width:100%; 
     height:100%; 
 }
+
+.center-aoi {
+  position: absolute;
+  left: 0;
+  top: 40%;
+  bottom: 50%;
+  width: 100%;
+  text-align: center;
+}
