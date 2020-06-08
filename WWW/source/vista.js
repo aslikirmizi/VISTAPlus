@@ -55,7 +55,7 @@ vista = function (
 
     };
 
-    var heatmapFileData = new Array(); //we dont need this actually we can use fileData that is already existing.
+    var heatmapFileData = new Array();
 
     var counter = 0;
     var counterk = 0
@@ -69,7 +69,6 @@ vista = function (
     /* File Module Functions STARTS */
 
     this.readFile = function (file) {
-        //alert("in readfile");
         if (file.files && file.files.length > 0) {
 
             for (var i = 0; file.files.length > i; i++) {
@@ -81,7 +80,6 @@ vista = function (
     };
 
     var fileLoader = function (event) {
-        //alert("in fileloader");
         data.lastFileID++;
 
         var fileContent = event.target.result;
@@ -103,7 +101,6 @@ vista = function (
                 }
             }
         }
-        //heatmapFileData=fileData;
 
         parseData(projectData(fileHeaders, fileData,
             ["index", "timestamp", "fixDuration", "posX", "posY", "stimuliName"]), data.lastFileID);
@@ -223,7 +220,8 @@ vista = function (
         mapData.edges.update(visualizationData.edges);
     }
 
-    this.showGazePath = function (stimuliName, filter = null) {// olan grafa arka plan koyuyor tek işi bu.
+    this.showGazePath = function (stimuliName, filter = null) {
+		
         if (heatmapInstanceflag == 1) {
             heatdata = {
                 max: 0,
@@ -234,12 +232,10 @@ vista = function (
         }
         listener("LOADERSTART");
         if (filter != null && filter.img != null) {
-            alert("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
         } else {
             fetchBackgroundImage(stimuliName);
         }
-
         createVisualMap(createGazePath(stimuliName, filter));
 
     };
@@ -283,14 +279,11 @@ vista = function (
     }
 
     function convertToVisualNode(index, stimuliInstant) {
-        //loadDataforHeatmap(stimuliInstant);
         heatmapDataPoint.h_fix_value[counter] = stimuliInstant[data.headerConvention[2]];
         heatmapDataPoint.h_x_pos[counter] = stimuliInstant[data.headerConvention[3]];
         heatmapDataPoint.h_y_pos[counter] = stimuliInstant[data.headerConvention[4]];
         counter = counter + 1;
-        //alert("****");
 
-        // DATAYI ALMAYI BAŞARDIK
 
         return {
             id: index,
@@ -490,11 +483,10 @@ vista = function (
 			for(i = 0; i < animatedRemovedAOIarray.length; i++){
 				if(animatedRemovedAOIarray[i] == index)
 					checker = 1;
-				
-			}
+				}
 			
 		if(checker != 1)
-			animatedRemovedAOIarray.push(index); // animated için koyduk, divAnime düzelmiş oldu, 4/29/2020
+			animatedRemovedAOIarray.push(index);
 			
 		}
 		
@@ -554,7 +546,7 @@ vista = function (
         backgroundImg.src = data.categories[findCategoryIndex(stimuliName)].img;
 
         backgroundImg.onload = function () {
-            var mapImg = $('#map').find('canvas')[1];
+            var mapImg = $('#map').find('canvas')[1]; // Ya siliyoruz ya da kalsın
 
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext("2d");
@@ -694,30 +686,26 @@ vista = function (
     // Heatmap generation functions start
 
     function createHeatmap(stimuliInstant) {
-        //alert("heatmapInstance öncesi");
+ 
         if (heatmapInstanceflag == 0) {
             heatmapInstance = h337.create(
                 {
                     container: document.querySelector('.vis-network'),
                 });
         }
-
+	
         heatdata = heatmapvalues(stimuliInstant);
         heatmapInstance.setData(heatdata);
 
     };
 
     function heatmapvalues(stimuliInstant) {
-
-        //alert("length");
-        //alert(heatmapDataPoint.h_x_pos.length);
-        //alert(heatmapDataPoint.h_y_pos.length);
-        //alert(heatmapDataPoint.h_fix_value.length);
+		
         var hpoints = new Array();
         var maxvalue = 0;
         var width = 1240.17;
         var height = 992.133;
-
+		
         for (var i = 0; i < heatmapDataPoint.h_x_pos.length; i++) { //length tek dimension olmalı
 
             var pointh = {
@@ -731,7 +719,7 @@ vista = function (
             hpoints.push(pointh);
 
         }
-
+		
         var hdata = {
             max: maxvalue,
             data: hpoints
@@ -743,25 +731,20 @@ vista = function (
 
 
     this.generateHeatmap = function (stimuliName, filter = null) {
-        //alert("----");
-        //alert(heatmapDataPoint.h_x_pos);
         mapData.nodes.clear();
         mapData.edges.clear();
 
         listener("LOADERSTART");
 
         if (filter != null && filter.img != null) {
-            console.log("hello 2");
             fetchBackgroundImage(stimuliName, filter.img);
         } else {
-
             fetchBackgroundImage(stimuliName);
             createHeatmap(stimuliName);
         }
-
+		
         heatmapInstanceflag = 1;
 
-        //listener("LOADEREND");
     };
 
 
@@ -776,12 +759,10 @@ vista = function (
         if ($('.aois').is(":hidden")) {
             $('.aois').show();
         }
+		
 
         animatedSTAseq = getSTAData(stimuliName, settings, filter);
-		
 		animatedRemovedAOIarray.sort();
-		alert(animatedRemovedAOIarray);
-		
 		
 		var tempRemovedArray = new Array();
 		var control = 0;
@@ -791,24 +772,22 @@ vista = function (
 				for(var j = 0; j < data.AOIs.length; j++){
 					if(animatedRemovedAOIarray[i] != data.AOIs[j]){
 						control = control + 1;
-					}	
+					}
+					//if(animatedRemovedAOIarray[i] == data.AOIs[j]){
+					//	control = control + 0
+					//}
 					if(control == data.AOIs.length){
 						tempRemovedArray.push(animatedRemovedAOIarray[i]);
-					}
+					}		
 				}
 				control = 0;
 			}
 		}
 		
-		
-		alert("***");
-		alert(tempRemovedArray);
 		animatedRemovedAOIarray = tempRemovedArray;		
-		alert("eşitlik");
-		alert(animatedRemovedAOIarray);
-		
 		var temp = 0; // divAnime'deki boşluklar için yaratılan bir temp
 		
+
         // array that holds the AOI block list with all CSS info as a <div>
         for (var i = 0; data.AOIs.length + animatedRemovedAOIarray.length > i; i++) { // AOI blocks are held inside the array by their order of data-index
             if(animatedRemovedAOIarray.length == 0)
@@ -823,27 +802,22 @@ vista = function (
 				}
 			}		
         }
-			
 		
         // The STA Sequence result will be kept in this variable
         var staResultBlock = [];
         for (i = 0; i < animatedSTAseq.length; i++) {
             staResultBlock[i] = animatedSTAseq[i]; // holds STA sequence result in an array
         }
-
+		
         animatedSTAMapAnimate(staResultBlock);
     };
 
     function animatedSTAMapAnimate(n) {
-        //alert("function: animatedSTAMapAnimate");
-        alert(n);
-		alert("The animation will begin right now.");
-		
         var tl = anime.timeline({
             easing: 'easeOutExpo',
             duration: 750
         });
-
+		
         for (i = 0; i < n.length; i++) {
             tl.add({
                 targets: animeDiv[n[i] - 1],

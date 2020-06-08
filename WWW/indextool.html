@@ -59,39 +59,12 @@
         <div class="buttonkk" style="left: 80%; top: 5%">
 
             <a download="save.png" id="imageDownloadTrigger" style="margin-right: 60px;" class=" modal-trigger buttonk button1 hide">
-                <span>Download PNG</span>
+                <span>Download STA Image</span>
             </a>
         </div>
 
     </section>
-    <!-- TOP SECTION BUTTONS ENDED-->
-    <!-- NOT WORKING PROPERLY
-        <nav class="nav-extended white">
-
-            <div class="nav-wrapper">
-
-
-                <div style="padding: 5px;" class="col s12">
-
-                    <div id="bannerimage"></div>
-                </div>
-
-            </div>
-
-            <div class="nav-content">
-
-
-                <a href="" download="save.png" id="imageDownloadTrigger" style="margin-right: 60px;" class="btn-floating btn-large halfway-fab waves-effect waves-light teal amber hide">
-                    <i class="material-icons unselectable">get_app</i>
-                </a>
-                <a id="dataSelectionTrigger" class="modal-trigger buttonk button1 hide"
-                    href="#dataSelectionModal">
-                    <i class="material-icons unselectable">list</i>
-                </a>
-            </div>
-        </nav>
-    -->
-
+   
     <div class="row">
 
         <div class="col s12">
@@ -130,24 +103,13 @@ AOIs are selected.</pre>
                             <a href="#"><font color="#000000"></font></a>
                         </div>
                     </li>
-
-
-
-                    <!-- heatmap function will be binded to here-->
                 </ul>
                 <!-- SELECTION PART ENDED-->
-
 
                 <div class="outer">
                     <div id="background" style="z-index: 1;">
                         <div class="inner" id="map" style="z-index: 2;"></div>
-                        <!-- innerı backgroundın içine alınca heatmap aşağı gitmiyor artık bg üzerine geliyor -->
                     </div>
-
-                    <!-- arkaplan -->
-                    <!-- gazepath buraya canvas yaratıyor -->
-                    <!-- heatmap buraya gelmeli -->
-                    <!--<div class="heatmap" style="position: absolute">-->
                 </div>
 
             </div>
@@ -208,47 +170,6 @@ AOIs are selected.</pre>
         </div>
     </div>
 
-
-    <!--<div style="left:30%; top:10%">
-        <label id="dataAddTrigger" class="buttonk button1" style="vertical-align:middle">
-            <span> Click Here To Add Data! </span><input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)' ;
-                                                         multiple />
-        </label>
-    </div>-->
-    <!--<div class="fixed-action-btn" style="left:50%; top:50%">
-        <div id="managementModal" style="right: 35px;top:500px">
-                   <a
-                   id="managementTrigger" class="buttonk button1" href="#managementModal">
-                <span>Preferences</span>
-                   </a>
-        </div>
-    </div>
-
-
-    <div class="fixed-action-btn" style="left:65%; top:50%">
-               <a
-                  id="dataSelectionTrigger" class="modal-trigger buttonk button1 hide"
-           href="#dataSelectionModal">
-            <span>Select Stimuli</span>
-               </a>
-    </div>-->
-    <!--
-        <ul>
-            <li>
-                <label id="dataAddTrigger" class="btn-floating blue waves-effect waves-light">
-                    <input style="display: none;" type="file" name="file[]" onchange='vistaModule.readFile(this)'
-                        multiple />
-                    <i class="material-icons unselectable">add</i>
-                </label>
-
-            </li>
-            <li>
-                <a id="managementTrigger" class="modal-trigger btn-floating yellow waves-effect waves-light" href="#managementModal">
-                    <i class="material-icons unselectable">build</i>
-                </a>
-            </li>
-        </ul>
-    -->
     <!-- Stimuli Viewing Section -->
     <div id="dataSelectionModal" class="modal bottom-sheet modal-fixed-footer">
         <div class="modal-content black-text">
@@ -459,7 +380,6 @@ AOIs are selected.</pre>
         $('#visualMethodSelector').find("li").removeClass("disabled");
         $('#visualMethodSelector').find("a").removeClass("active");
         $('#methodGazePath').find("a").addClass("active");
-        //$('canvas').show();
         vistaModule.addAOIBlock(false);
         controlVisualMethods();
     }
@@ -469,8 +389,6 @@ AOIs are selected.</pre>
         clearAOIs();
         selectedVisualMethod = "HEATMAP";
         $('#visualMethodSelector').find("li").removeClass("active");
-        //$('#visualMethodSelector').find("a").removeClass("active");
-        //$('canvas').hide();
         vistaModule.addAOIBlock(false);
         controlVisualMethods();
     }
@@ -505,17 +423,6 @@ AOIs are selected.</pre>
             width: 0,
             height: 0
         }
-        //$("#dataAddTrigger").click(function(){
-        //    $("label").hide();
-        //});
-
-        //$("#managementTrigger").click(function(){
-        //    $("label").hide();
-        //});
-
-        //$("#dataSelectionTrigger").click(function(){
-        //    $("label").hide();
-        //});
 
         $('#dataSelectionList').delegate("li", "click", function () { // Stimuli seçme tuşu
             selectedStimuliName = $(this).data("stimuliname");
@@ -577,22 +484,18 @@ AOIs are selected.</pre>
                         drawAOIs();
                         vistaModule.generateHeatmap(selectedStimuliName);
                         $(".heatmap-canvas").prependTo($(".vis-network"));
-                        //vistaModule.addAOIBlock(false);
                         prevVisualMethod = "HEATMAP";
                     }
 
                     else if (selectedVisualMethod == "STAMAP") {
                         $(".heatmap-canvas").hide();
-                        //clearAOIs();
                         vistaModule.showSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                         vistaModule.addAOIBlock(true);
                     }
                     else if (selectedVisualMethod == "AnimatedSTA") {
                         drawAOIs();
-                        // ANIMATED FUNCTIONS WILL BE BINDED HERE
                         vistaModule.animatedSTAMap(selectedStimuliName, settings.sta, filter[selectedStimuliName]);
                     }
-                    //prevVisualMethod = selectedVisualMethod;
                     $(this).parent().find("a").removeClass("active");
                     $(this).find("li").addClass("active");
                 }
