@@ -14,7 +14,7 @@ body {
   font-family: "Poppins", Arial, sans-serif;
   font-weight: 300;
   font-size: 16px;
-  line-height: 2;
+  line-height: 3;
   color: gray;
   background: whitesmoke; }
 
@@ -105,7 +105,7 @@ h1, h2, h3, h4, h5, h6, figure {
       .colorlib-nav .top-menu {
         padding: 28px 1em; } }
   .colorlib-nav #colorlib-logo {
-    font-size: 20px;
+    font-size: 22px;
     margin: 0;
     padding: 0;
     text-transform: uppercase;
@@ -130,10 +130,10 @@ h1, h2, h3, h4, h5, h6, figure {
       margin: 0;
       list-style: none;
       display: inline;
-      font-weight: 500;
+      font-weight: 550;
       text-transform: uppercase;
-      font-size: 12px;
-      letter-spacing: 2px; }
+      font-size: 17px;
+      letter-spacing: 3px; }
       .colorlib-nav ul li a {
         position: relative;
         padding: 20px 12px;
@@ -258,7 +258,9 @@ h1, h2, h3, h4, h5, h6, figure {
     background: rgba(0, 0, 0, 0.3);
     -webkit-transition: 0.5s;
     -o-transition: 0.5s;
-    transition: 0.5s; }
+    transition: 0.5s;
+	opacity: 0.2;
+ }
   .colorlib-video:hover .overlay {
     background: rgba(0, 0, 0, 0.7); }
   .colorlib-video:hover a {
@@ -283,7 +285,7 @@ h1, h2, h3, h4, h5, h6, figure {
     bottom: 0;
     left: 0;
     right: 0;
-    opacity: 0.95;
+    opacity: 0.6;
     background: #499bea;
     background: -moz-linear-gradient(-45deg, #499bea 0%, #798eea 100%);
     background: -webkit-gradient(left top, right bottom, color-stop(0%, #499bea), color-stop(100%, #798eea));
@@ -1483,4 +1485,5 @@ input[type="text"] {
   background: url(../images/loader.gif) center no-repeat #fff; }
 
 .js .animate-box {
-  opacity: 0; }
+  opacity: 0;
+}

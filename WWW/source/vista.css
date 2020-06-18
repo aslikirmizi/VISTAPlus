@@ -1,6 +1,7 @@
 body {
     color: #d3d3d3;
-    font: 12pt arial;
+    font: 12pt;
+	font-family: "Poppins", Arial, sans-serif;
 }
 
 #background {
