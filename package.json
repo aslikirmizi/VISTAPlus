@@ -15,7 +15,7 @@
     "author": "mcanatalay & serkankarabulut",
     "license": "UNLICENSED",
     "devDependencies": {
-        "mocha": "3.2.0",
+        "mocha": "10.2.0",
         "rimraf": "latest",
         "copy-dir": "latest"
     },
